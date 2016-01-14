@@ -1,0 +1,57 @@
+.brickW
+{
+	position: absolute;
+	height: 5px;
+	width: 5px;
+	background-color:#FFF;
+	border: solid #999 1px;
+}
+
+.brickWNoB
+{
+	position: absolute;
+	height: 5px;
+	width: 5px;
+	background-color:#FFF;
+}
+
+.brickB
+{
+	position: absolute;
+	height: 5px;
+	width: 5px;
+	background-color:#000;
+	border: solid #999 1px;
+}
+
+.brickBNoB
+{
+	position: absolute;
+	height: 5px;
+	width: 5px;
+	background-color:#000;
+}
+
+.brickR
+{
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	height: 2px;
+	width: 2px;
+	background-color: red;
+	border: solid #999 1px;
+}
+#gameOfLife
+{
+	position: absolute;
+	height: 60px;
+	width: 60px;
+}
+#langtonAnt
+{
+	position: absolute;
+	top: 80px;
+	height: 60px;
+	width: 60px;
+}
