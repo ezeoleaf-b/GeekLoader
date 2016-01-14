@@ -1,5 +1,5 @@
 # GeekLoader
-GeekLoader is a loader made with Javascript and CSS so you can replace the boring loaders with John Conway's Game of Life or with Langton's ant
+GeekLoader is a loader made with Javascript and CSS so you can replace the boring loaders with [John Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) or with [Langton's ant](https://en.wikipedia.org/wiki/Langton%27s_ant)
 
 ## How to use it
 Just create an object of GeekLoader
