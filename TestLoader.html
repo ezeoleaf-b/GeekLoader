@@ -2,8 +2,7 @@
 <html>
 <head>
 	<title>Test Loader</title>
-	<link href="css/loader.css" rel="stylesheet" type="text/css" />
-	<script src="js/loader.js" type='text/javascript'></script>
+	<script src="js/geekLoader.js"></script>
 	<script>
 
 	var loader1;
@@ -18,15 +17,11 @@
 <div id="loader2" style="display:inline-block;top:100px;"></div>
 <script>
 (function() {
-/*
-	loader1 = new GeekLoader();
-	loader1.type='ant';
-	loader1.generate();
-	loader1.start();
-*/
 	loader2 = new GeekLoader();
 	loader2.destiny = 'loader2';
 	loader2.type='life';
+	loader2.style='danger';
+	loader2.border=true;
 	loader2.generate();
 	loader2.start();
 })();

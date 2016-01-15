@@ -9,9 +9,11 @@ function GeekLoader(){
 	this.size = 5;
 	this.timer;
 	this.border = true;
+	this.style = 'default';
 	this.antPos;
 	this.degree = 0;
 	this.time = 500;
+	this.styleLoaded = {};
 };
 
 GeekLoader.prototype.getTypesAvailable = function(){
@@ -58,24 +60,111 @@ GeekLoader.prototype.loadBrick = function(){
 	var initialPos = loaderDiv.offsetLeft;
 	var posBrick_x = initialPos;
 	var posBrick_y = loaderDiv.offsetTop;
-
+	this.styleLoaded = this.getCSS();
+	/*
 	if(this.border)
 		classN='brickW';
 	else
 		classN='brickWNoB';
-
+	*/
 	for ( var i = 1; i <= this.sizeH; i++ ) 
 	{
 		for ( var j = 1; j <= this.sizeV; j++)
 		{
-			especificBrick += `<div class="${classN}" id="brick${i.toString()}-${j.toString()}" style="left: ${posBrick_x}px; top: ${posBrick_y}px;"></div>`;
+			//especificBrick += `<div class="${classN}" id="brick${i.toString()}-${j.toString()}" style="left: ${posBrick_x}px; top: ${posBrick_y}px;"></div>`;
+			especificBrick += `<div class="brickW" id="brick${i.toString()}-${j.toString()}" style="left: ${posBrick_x}px; top: ${posBrick_y}px;${this.styleLoaded.brickW}"></div>`;
 			posBrick_x += this.size;
 		}
 		posBrick_x = initialPos;
 		posBrick_y += this.size;
 	}
 	dDL.getElementById(this.destiny).innerHTML = especificBrick;
-}
+};
+
+GeekLoader.prototype.getCSS = function(){
+	var borderS = (this.border) ? 1 : 0;
+	var s1 = `position:absolute;height:${this.size}px;width:${this.size}px;background-color:#`;
+	var s2 = `;border: solid #`;
+	var s3 = ` ${borderS}px;`;
+	var sr = `top: 0px;left:0px;height:${parseInt(this.size)}px;width:${parseInt(this.size)}px;background-color:#`;
+	var cW,cBr,cB,cA;
+	switch(this.style)
+	{
+		case 'primary':
+			cW = `337ab7`;
+			cBr = `2e6da4`;
+			cB = `fff`;
+			cA = `FF0303`;
+			break;
+		case 'not-primary':
+			cW = `fff`;
+			cBr = `2e6da4`;
+			cB = `337ab7`;
+			cA = `FF0303`;
+			break;
+		case 'success':
+			cW = `5cb85c`;
+			cBr = `4cae4c`;
+			cB = `fff`;
+			cA = `FF0303`;
+			break;
+		case 'not-success':
+			cW = `fff`;
+			cBr = `4cae4c`;
+			cB = `5cb85c`;
+			cA = `FF0303`;
+			break;
+		case 'info':
+			cW = `5bc0de`;
+			cBr = `46b8da`;
+			cB = `fff`;
+			cA = `FF0303`;
+			break;
+		case 'not-info':
+			cW = `fff`;
+			cBr = `46b8da`;
+			cB = `5bc0de`;
+			cA = `FF0303`;
+			break;
+		case 'warning':
+			cW = `f0ad4e`;
+			cBr = `eea236`;
+			cB = `fff`;
+			cA = `000`;
+			break;
+		case 'not-warning':
+			cW = `fff`;
+			cBr = `eea236`;
+			cB = `f0ad4e`;
+			cA = `000`;
+			break;
+		case 'danger':
+			cW = `d9534f`;
+			cBr = `d43f3a`;
+			cB = `fff`;
+			cA = `000`;
+			break;
+		case 'not-danger':
+			cW = `fff`;
+			cBr = `d43f3a`;
+			cB = `d9534f`;
+			cA = `000`;
+			break;
+		case 'default':
+		default:
+			cW = `FFF`;
+			cBr = `999`;
+			cB = `000`;
+			cA = `FF0303`;
+			break;
+	}
+	cssStyle = {
+		brickW:`${s1}${cW}${s2}${cBr}${s3}`,
+		brickB:`${s1}${cB}${s2}${cBr}${s3}`,
+		brickR:`${sr}${cA}${s2}${cBr}${s3}`
+	}
+	return cssStyle;
+};
 
 GeekLoader.prototype.setFigure = function(){
 	switch(this.type){
@@ -85,6 +174,8 @@ GeekLoader.prototype.setFigure = function(){
 			{
 				var brickName= `brick${vFigure[i]}`;
 				dDL.getElementById(brickName).className = 'brickB';
+				var style = `left:${dDL.getElementById(brickName).style.left};top:${dDL.getElementById(brickName).style.top};${this.styleLoaded.brickB}`;
+				dDL.getElementById(brickName).setAttribute('style',style);
 			}
 			break;
 		case 'ant':
@@ -92,6 +183,7 @@ GeekLoader.prototype.setFigure = function(){
 			var brickName = `brick${this.antPos}`;
 			var div = dDL.createElement('div');
 			div.className = 'brickR';
+			div.setAttribute('style',this.styleLoaded.brickR);
 			dDL.getElementById(brickName).appendChild(div);
 			break;
 	}
@@ -119,12 +211,7 @@ GeekLoader.prototype.move = function(){
 GeekLoader.prototype.moveCellG = function()
 {
 	var move = false;
-	var brickName,classN;
-
-	if(this.border)
-		classN='brickW';
-	else
-		classN='brickWNoB';
+	var brickName;
 
 	for ( var i = 1; i <= this.sizeH; i++ ) 
 	{
@@ -136,15 +223,19 @@ GeekLoader.prototype.moveCellG = function()
 			{
 				if((cantOfLivingCells < 2) || (cantOfLivingCells > 3))
 				{
-					dDL.getElementById(brickName).className = classN;
+					dDL.getElementById(brickName).className = 'brickW';
+					var style = `left:${dDL.getElementById(brickName).style.left};top:${dDL.getElementById(brickName).style.top};${this.styleLoaded.brickW}`;
+					dDL.getElementById(brickName).setAttribute('style',style);
 					move = true;
 				}
 			}
-			else if(dDL.getElementById(brickName).className == classN)
+			else if(dDL.getElementById(brickName).className == 'brickW')
 			{
 				if((cantOfLivingCells == 3))
 				{
 					dDL.getElementById(brickName).className = 'brickB';
+					var style = `left:${dDL.getElementById(brickName).style.left};top:${dDL.getElementById(brickName).style.top};${this.styleLoaded.brickB}`;
+					dDL.getElementById(brickName).setAttribute('style',style);
 					move = true;
 				}
 			}
@@ -180,21 +271,18 @@ GeekLoader.prototype.moveCellG = function()
 
 GeekLoader.prototype.moveCellA = function()
 {
-	var addAnt = '<div class="brickR"></div>';
+	var addAnt = `<div class="brickR" style="${this.styleLoaded.brickR}"></div>`;
 	var nextPos;
 	var antName = `brick${this.antPos}`;
 	var vAntName = this.antPos.split('-');
-	var newName,className,classN;
+	var newName,className,classS;
 	var noMove = false;
 
-	if(this.border)
-		classN='brickW';
-	else
-		classN='brickWNoB';
 
-	if(dDL.getElementById(antName).className == classN)
+	if(dDL.getElementById(antName).className == 'brickW')
 	{
 		className = 'brickB';
+		classS = `left:${dDL.getElementById(antName).style.left};top:${dDL.getElementById(antName).style.top};${this.styleLoaded.brickB}`;
 		switch(this.degree)
 		{
 			case 0:			
@@ -225,7 +313,8 @@ GeekLoader.prototype.moveCellA = function()
 	}
 	else
 	{
-		className = classN;
+		className = 'brickW';
+		classS = `left:${dDL.getElementById(antName).style.left};top:${dDL.getElementById(antName).style.top};${this.styleLoaded.brickW}`;
 		switch(this.degree)
 		{
 			case 0:
@@ -259,6 +348,7 @@ GeekLoader.prototype.moveCellA = function()
 		this.antPos = newName;
 		dDL.getElementById(antName).innerHTML = '';
 		dDL.getElementById(antName).className = className;
+		dDL.getElementById(antName).setAttribute('style',classS);
 		nextPos = `brick${this.antPos}`;
 		dDL.getElementById(nextPos).innerHTML = addAnt;
 	}
