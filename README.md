@@ -20,15 +20,26 @@ You can configure the loader with this options
 - sizeV --Quantity of columns
 - size --The size of each cell
 - time --The time between each move(milliseconds)
-- destiny --The id of the div that contains the loader
+- contain --The id of the div that contains the loader
 - border --If every cell has border or not
 - style --Use bootstrap styles to give every cell colors
 
 ### Available Options
-Options | Values
------------- | -------------
-type | * "life"
-	   * "ant"
+Options | Values | Default Value
+------- | ------ | -------------
+type | "life","ant" | "life"
+sizeH | > 4 | 12
+sizeV | > 4 | 12
+size | > 2 | 5
+time | > 200 | 500
+border | true or false | true
+contain | Any div's ID | "loader"
+style | "primary", "not-primary" | "default"
+" |    "success", "not-success"
+" | "info", "not-info"
+" | "warning", "not-warning"
+" | "danger", "not-danger"
+" | "default"
 
 
 ### How to configure it

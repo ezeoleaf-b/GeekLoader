@@ -5,7 +5,7 @@ function GeekLoader(){
 	this.setSize();
 	this.positionsLife = [];
 	this.generate();
-	this.destiny = 'loader';
+	this.contain = 'loader';
 	this.size = 5;
 	this.timer;
 	this.border = true;
@@ -56,7 +56,7 @@ GeekLoader.prototype.generate = function(){
 GeekLoader.prototype.loadBrick = function(){
 	var especificBrick = '';
 	var classN;
-	var loaderDiv = dDL.getElementById(this.destiny);
+	var loaderDiv = dDL.getElementById(this.contain);
 	var initialPos = loaderDiv.offsetLeft;
 	var posBrick_x = initialPos;
 	var posBrick_y = loaderDiv.offsetTop;
@@ -78,7 +78,7 @@ GeekLoader.prototype.loadBrick = function(){
 		posBrick_x = initialPos;
 		posBrick_y += this.size;
 	}
-	dDL.getElementById(this.destiny).innerHTML = especificBrick;
+	dDL.getElementById(this.contain).innerHTML = especificBrick;
 };
 
 GeekLoader.prototype.getCSS = function(){
@@ -360,5 +360,5 @@ GeekLoader.prototype.stop = function(){
 };
 
 GeekLoader.prototype.cleanDesk = function(){
-	dDL.getElementById(this.destiny).innerHTML = '';
+	dDL.getElementById(this.contain).innerHTML = '';
 };
