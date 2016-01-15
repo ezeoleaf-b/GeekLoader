@@ -24,6 +24,13 @@ You can configure the loader with this options
 - border --If every cell has border or not
 - style --Use bootstrap styles to give every cell colors
 
+### Available Options
+Options | Values
+------------ | -------------
+type | * "life"
+	   * "ant"
+
+
 ### How to configure it
 ```javascript
 loader.type = 'life';
