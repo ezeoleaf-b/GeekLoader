@@ -14,7 +14,7 @@ loader = new GeekLoader();
 ```
 
 ### Options
-You can configure the loader with this options
+You can configure the loader with these options
 - type --This is the type of loader
 - sizeH --Quantity of rows
 - sizeV --Quantity of columns
