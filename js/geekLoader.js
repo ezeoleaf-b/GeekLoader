@@ -61,24 +61,17 @@ GeekLoader.prototype.loadBrick = function(){
 	var posBrick_x = initialPos;
 	var posBrick_y = loaderDiv.offsetTop;
 	this.styleLoaded = this.getCSS();
-	/*
-	if(this.border)
-		classN='brickW';
-	else
-		classN='brickWNoB';
-	*/
 	for ( var i = 1; i <= this.sizeH; i++ ) 
 	{
 		for ( var j = 1; j <= this.sizeV; j++)
 		{
-			//especificBrick += `<div class="${classN}" id="brick${i.toString()}-${j.toString()}" style="left: ${posBrick_x}px; top: ${posBrick_y}px;"></div>`;
-			especificBrick += `<div class="brickW" id="brick${i.toString()}-${j.toString()}" style="left: ${posBrick_x}px; top: ${posBrick_y}px;${this.styleLoaded.brickW}"></div>`;
+			especificBrick += `<div class="brickW" id="brick${i.toString()}-${j.toString()}-${this.contain}" style="left: ${posBrick_x}px; top: ${posBrick_y}px;${this.styleLoaded.brickW}"></div>`;
 			posBrick_x += this.size;
 		}
 		posBrick_x = initialPos;
 		posBrick_y += this.size;
 	}
-	dDL.getElementById(this.contain).innerHTML = especificBrick;
+	loaderDiv.innerHTML = especificBrick;
 };
 
 GeekLoader.prototype.getCSS = function(){
@@ -172,19 +165,21 @@ GeekLoader.prototype.setFigure = function(){
 			var vFigure = this.positionsLife;
 			for(var i = 0; i < vFigure.length; i++)
 			{
-				var brickName= `brick${vFigure[i]}`;
-				dDL.getElementById(brickName).className = 'brickB';
-				var style = `left:${dDL.getElementById(brickName).style.left};top:${dDL.getElementById(brickName).style.top};${this.styleLoaded.brickB}`;
-				dDL.getElementById(brickName).setAttribute('style',style);
+				var brickName= `brick${vFigure[i]}-${this.contain}`;
+				var bDiv = dDL.getElementById(brickName);
+				bDiv.className = 'brickB';
+				var style = `left:${bDiv.style.left};top:${bDiv.style.top};${this.styleLoaded.brickB}`;
+				bDiv.setAttribute('style',style);
 			}
 			break;
 		case 'ant':
 			this.antPos = Math.floor(this.sizeH / 2)+'-'+Math.floor(this.sizeV / 2);
-			var brickName = `brick${this.antPos}`;
+			var brickName = `brick${this.antPos}-${this.contain}`;
+			var bDiv = dDL.getElementById(brickName);
 			var div = dDL.createElement('div');
 			div.className = 'brickR';
 			div.setAttribute('style',this.styleLoaded.brickR);
-			dDL.getElementById(brickName).appendChild(div);
+			bDiv.appendChild(div);
 			break;
 	}
 };
@@ -217,37 +212,32 @@ GeekLoader.prototype.moveCellG = function()
 	{
 		for ( var j = 1; j <= this.sizeV; j++)
 		{
-			brickName = `brick${i}-${j}`;
-			cantOfLivingCells = countCells(i,j);
-			if(dDL.getElementById(brickName).className == 'brickB')
+			brickName = `brick${i}-${j}-${this.contain}`;
+			var bDiv = dDL.getElementById(brickName);
+			cantOfLivingCells = countCells(i,j,this);
+			if(bDiv.className == 'brickB' && ((cantOfLivingCells < 2) || (cantOfLivingCells > 3)))
 			{
-				if((cantOfLivingCells < 2) || (cantOfLivingCells > 3))
-				{
-					dDL.getElementById(brickName).className = 'brickW';
-					var style = `left:${dDL.getElementById(brickName).style.left};top:${dDL.getElementById(brickName).style.top};${this.styleLoaded.brickW}`;
-					dDL.getElementById(brickName).setAttribute('style',style);
+					bDiv.className = 'brickW';
+					var style = `left:${bDiv.style.left};top:${bDiv.style.top};${this.styleLoaded.brickW}`;
+					bDiv.setAttribute('style',style);
 					move = true;
-				}
 			}
-			else if(dDL.getElementById(brickName).className == 'brickW')
+			else if(bDiv.className == 'brickW' && (cantOfLivingCells == 3))
 			{
-				if((cantOfLivingCells == 3))
-				{
-					dDL.getElementById(brickName).className = 'brickB';
-					var style = `left:${dDL.getElementById(brickName).style.left};top:${dDL.getElementById(brickName).style.top};${this.styleLoaded.brickB}`;
-					dDL.getElementById(brickName).setAttribute('style',style);
+					bDiv.className = 'brickB';
+					var style = `left:${bDiv.style.left};top:${bDiv.style.top};${this.styleLoaded.brickB}`;
+					bDiv.setAttribute('style',style);
 					move = true;
-				}
 			}
 		}
 	}
-	if(move == false)
+	if(!move)
 	{
 		this.generate();
 		this.setFigure();
 	}
 
-	function countCells(x,y){
+	function countCells(x,y,t){
 		var brickName;
 		var livingCells = 0;
 		for(var i = -1; i <= 1; i++)
@@ -256,10 +246,10 @@ GeekLoader.prototype.moveCellG = function()
 			{
 				if(i != 0 || j != 0)
 				{
-					brickName = `brick${x+i}-${y+j}`;
-					if(dDL.getElementById(brickName) != null)
+					brickName = `brick${x+i}-${y+j}-${t.contain}`;
+					var bDiv = dDL.getElementById(brickName);
+					if(bDiv != null && bDiv.className == 'brickB')
 					{
-						if(dDL.getElementById(brickName).className == 'brickB')
 							livingCells++;	
 					}
 				}
@@ -273,16 +263,16 @@ GeekLoader.prototype.moveCellA = function()
 {
 	var addAnt = `<div class="brickR" style="${this.styleLoaded.brickR}"></div>`;
 	var nextPos;
-	var antName = `brick${this.antPos}`;
+	var antName = `brick${this.antPos}-${this.contain}`;
 	var vAntName = this.antPos.split('-');
 	var newName,className,classS;
 	var noMove = false;
+	aDiv = dDL.getElementById(antName);
 
-
-	if(dDL.getElementById(antName).className == 'brickW')
+	if(aDiv.className == 'brickW')
 	{
 		className = 'brickB';
-		classS = `left:${dDL.getElementById(antName).style.left};top:${dDL.getElementById(antName).style.top};${this.styleLoaded.brickB}`;
+		classS = `left:${aDiv.style.left};top:${aDiv.style.top};${this.styleLoaded.brickB}`;
 		switch(this.degree)
 		{
 			case 0:			
@@ -314,7 +304,7 @@ GeekLoader.prototype.moveCellA = function()
 	else
 	{
 		className = 'brickW';
-		classS = `left:${dDL.getElementById(antName).style.left};top:${dDL.getElementById(antName).style.top};${this.styleLoaded.brickW}`;
+		classS = `left:${aDiv.style.left};top:${aDiv.style.top};${this.styleLoaded.brickW}`;
 		switch(this.degree)
 		{
 			case 0:
@@ -346,10 +336,10 @@ GeekLoader.prototype.moveCellA = function()
 	if(newName!=undefined)
 	{
 		this.antPos = newName;
-		dDL.getElementById(antName).innerHTML = '';
-		dDL.getElementById(antName).className = className;
-		dDL.getElementById(antName).setAttribute('style',classS);
-		nextPos = `brick${this.antPos}`;
+		aDiv.innerHTML = '';
+		aDiv.className = className;
+		aDiv.setAttribute('style',classS);
+		nextPos = `brick${this.antPos}-${this.contain}`;
 		dDL.getElementById(nextPos).innerHTML = addAnt;
 	}
 };
