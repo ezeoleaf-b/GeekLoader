@@ -59,3 +59,9 @@ loader.generate(); //It's executed with the constructor, but you can call it any
 loader.start(); //Starts the movement of the loader
 loader.stop(); //Stop the loader and hides it
 ```
+
+## License
+
+[![Creative Commons License](https://i.creativecommons.org/l/by-sa/4.0/88x31.png)](http://creativecommons.org/licenses/by-sa/4.0/)
+
+This work is licensed under a [Creative Commons Attribution-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-sa/4.0/).
