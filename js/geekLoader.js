@@ -17,18 +17,26 @@ function GeekLoader(){
 };
 
 GeekLoader.prototype.getTypesAvailable = function(){
-	return ['life','ant']
-}
+	return ['life','ant','tardis'];
+};
 
 GeekLoader.prototype.checkType = function(){
-	if(this.getTypesAvailable().indexOf(this.type) == -1)
+	if(!~this.getTypesAvailable().indexOf(this.type))
 		this.type = 'life';
-}
+};
 
 GeekLoader.prototype.checkSize = function(){
-	if(this.sizeH < 4) this.sizeH = 4;
-	if(this.sizeV < 4) this.sizeV = 4;
-}
+	if(this.type=='tardis')
+	{
+		if(this.rows < 14) this.rows = 14;
+		if(this.columns < 9) this.columns = 9;
+	}
+	else
+	{
+		if(this.rows < 4) this.rows = 4;
+		if(this.columns < 4) this.columns = 4;
+	}
+};
 
 GeekLoader.prototype.generate = function(){
 	this.checkType();
@@ -37,19 +45,108 @@ GeekLoader.prototype.generate = function(){
 	{
 		this.positionsLife = [];
 		var cantGenerated = 0;
-		var limit = parseInt((this.sizeH * this.sizeV) * 0.2);
+		var limit = parseInt((this.rows * this.columns) * 0.2);
 		do
 		{
-			var h = Math.floor(Math.random() * this.sizeH + 1);
-			var v = Math.floor(Math.random() * this.sizeV + 1);
+			var h = Math.floor(Math.random() * this.rows + 1);
+			var v = Math.floor(Math.random() * this.columns + 1);
 			var elementToAdd = `${h}-${v}`;
-			if(this.positionsLife.indexOf(elementToAdd) == -1)
+			if(!~this.positionsLife.indexOf(elementToAdd))
 			{
 				this.positionsLife.push(elementToAdd);
 				cantGenerated++;
 			}
 
 		}while(cantGenerated < limit)
+	}
+	else if(this.type == 'tardis')
+	{
+		this.positionsLife = this.getTardisPositions();
+	}
+};
+
+GeekLoader.prototype.getTardisData = function(){
+	var tData = {}
+
+	if(this.columns < 6)
+	{
+		tData.start = 1;
+		tData.end = this.columns;
+		tData.bottom = this.rows;
+		tData.top = 3;
+	}
+	else
+	{
+		tData.start = 2;
+		tData.end = this.columns - 1;
+		tData.bottom = this.rows - 1;
+		tData.top = 5;
+	}
+
+	return tData;
+};
+
+GeekLoader.prototype.getTardisPositions = function(){
+	var posTardis = [];
+
+	var data = this.getTardisData();
+	this.lastRowT = this.rows;
+
+	for(var i = data.start; i <= data.end; i++)
+	{
+		var pos = `${data.bottom}-${i}`;
+		posTardis.push(pos);
+		var pos2 = `${data.top}-${i}`;
+		posTardis.push(pos2);
+	}
+
+	for(var i = data.top; i <= data.bottom; i++)
+	{
+		var pos = `${i}-${data.start}`;
+		posTardis.push(pos);
+		var pos2 = `${i}-${data.end}`;
+		posTardis.push(pos2);
+	}
+
+	for(var i = (data.top + 2);i < (data.bottom - 1);i=i+2)
+	{
+		for(var j = data.start; j <= data.end; j++)
+		{
+			var pos = `${i}-${j}`;
+			posTardis.push(pos);
+		}		
+	}
+
+	for(var i = (data.start + 1); i <= (data.end - 1);i++)
+	{
+		var pos = `${(data.top -1)}-${i}`;
+		posTardis.push(pos);
+	}
+
+	getTopTardis(this);
+	
+	return posTardis.filter(function(elem, pos) {
+		return posTardis.indexOf(elem) == pos;
+	});
+
+	function getTopTardis(t)
+	{
+		var middle = [];
+		var from = 2;
+		var midP = parseInt((t.columns) / 2);
+		if((t.columns % 2 == 0))
+			middle = [midP,(midP+1)];
+		else
+			middle = [midP+1];
+
+		for(var i = from; i < (data.bottom);i++)
+		{
+			for(var j = 0; j < middle.length;j++)
+			{
+				var pos = `${i}-${middle[j]}`;
+				posTardis.push(pos);
+			}
+		}
 	}
 };
 
@@ -61,9 +158,9 @@ GeekLoader.prototype.loadBrick = function(){
 	var posBrick_x = initialPos;
 	var posBrick_y = loaderDiv.offsetTop;
 	this.styleLoaded = this.getCSS();
-	for ( var i = 1; i <= this.sizeH; i++ ) 
+	for ( var i = 1; i <= this.rows; i++ ) 
 	{
-		for ( var j = 1; j <= this.sizeV; j++)
+		for ( var j = 1; j <= this.columns; j++)
 		{
 			especificBrick += `<div class="brickW" id="brick${i.toString()}-${j.toString()}-${this.contain}" style="left: ${posBrick_x}px; top: ${posBrick_y}px;${this.styleLoaded.brickW}"></div>`;
 			posBrick_x += this.size;
@@ -162,6 +259,7 @@ GeekLoader.prototype.getCSS = function(){
 GeekLoader.prototype.setFigure = function(){
 	switch(this.type){
 		case 'life':
+		case 'tardis':
 			var vFigure = this.positionsLife;
 			for(var i = 0; i < vFigure.length; i++)
 			{
@@ -173,7 +271,7 @@ GeekLoader.prototype.setFigure = function(){
 			}
 			break;
 		case 'ant':
-			this.antPos = Math.floor(this.sizeH / 2)+'-'+Math.floor(this.sizeV / 2);
+			this.antPos = Math.floor(this.rows / 2)+'-'+Math.floor(this.columns / 2);
 			var brickName = `brick${this.antPos}-${this.contain}`;
 			var bDiv = dDL.getElementById(brickName);
 			var div = dDL.createElement('div');
@@ -185,8 +283,8 @@ GeekLoader.prototype.setFigure = function(){
 };
 
 GeekLoader.prototype.setSize = function(h,v){
-	this.sizeH = (h==undefined) ? 12 : h;
-	this.sizeV = (v==undefined) ? 12 : v;
+	this.rows = (h==undefined) ? 12 : h;
+	this.columns = (v==undefined) ? 12 : v;
 }
 
 GeekLoader.prototype.start = function(){
@@ -199,8 +297,38 @@ GeekLoader.prototype.start = function(){
 GeekLoader.prototype.move = function(){
 	if(this.type == 'life')
 		this.moveCellG();
-	else
+	else if(this.type == 'ant')
 		this.moveCellA();
+	else if(this.type == 'tardis')
+		this.moveCellT();
+};
+
+GeekLoader.prototype.moveCellT = function()
+{
+	var brickName,posName;
+	if((this.lastRowT - 1 == 1))
+		this.lastRowT = this.rows;
+	else
+		this.lastRowT--;
+	
+	for(var j = 1; j <= this.columns; j++)
+	{
+		posName = `${this.lastRowT}-${j}`;
+		brickName = `brick${this.lastRowT}-${j}-${this.contain}`;
+		var bDiv = dDL.getElementById(brickName);
+		if(bDiv.className == 'brickB')
+		{
+				bDiv.className = 'brickW';
+				var style = `left:${bDiv.style.left};top:${bDiv.style.top};${this.styleLoaded.brickW}`;
+				bDiv.setAttribute('style',style);
+		}
+		else if(bDiv.className == 'brickW' && (~this.positionsLife.indexOf(posName)))
+		{
+				bDiv.className = 'brickB';
+				var style = `left:${bDiv.style.left};top:${bDiv.style.top};${this.styleLoaded.brickB}`;
+				bDiv.setAttribute('style',style);
+		}
+	}
 };
 
 GeekLoader.prototype.moveCellG = function()
@@ -208,9 +336,9 @@ GeekLoader.prototype.moveCellG = function()
 	var move = false;
 	var brickName;
 
-	for ( var i = 1; i <= this.sizeH; i++ ) 
+	for ( var i = 1; i <= this.rows; i++ ) 
 	{
-		for ( var j = 1; j <= this.sizeV; j++)
+		for ( var j = 1; j <= this.columns; j++)
 		{
 			brickName = `brick${i}-${j}-${this.contain}`;
 			var bDiv = dDL.getElementById(brickName);
@@ -282,13 +410,13 @@ GeekLoader.prototype.moveCellA = function()
 				this.degree = 90;
 				break;
 			case 90:
-				if((parseInt(vAntName[1]) + 1) <= this.sizeV)
+				if((parseInt(vAntName[1]) + 1) <= this.columns)
 					newName = vAntName[0]+ '-' + (parseInt(vAntName[1]) + 1);
 					
 				this.degree = 180;
 				break;
 			case 180:
-				if((parseInt(vAntName[0]) + 1) <= this.sizeH)
+				if((parseInt(vAntName[0]) + 1) <= this.rows)
 					newName = (parseInt(vAntName[0]) + 1) + '-' + vAntName[1];
 
 				this.degree = 270;
@@ -308,7 +436,7 @@ GeekLoader.prototype.moveCellA = function()
 		switch(this.degree)
 		{
 			case 0:
-				if((parseInt(vAntName[0]) + 1) <= this.sizeH)
+				if((parseInt(vAntName[0]) + 1) <= this.rows)
 					newName = (parseInt(vAntName[0]) + 1) + '-' + vAntName[1];
 					
 				this.degree = 270;
@@ -326,7 +454,7 @@ GeekLoader.prototype.moveCellA = function()
 				this.degree = 90;
 				break;
 			case 270:
-				if((parseInt(vAntName[1]) + 1) <= this.sizeV)
+				if((parseInt(vAntName[1]) + 1) <= this.columns)
 					newName = vAntName[0]+ '-' + (parseInt(vAntName[1]) + 1);
 					
 				this.degree = 180;
