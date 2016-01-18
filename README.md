@@ -16,8 +16,8 @@ loader = new GeekLoader();
 ### Options
 You can configure the loader with these options
 - type --This is the type of loader
-- sizeH --Quantity of rows
-- sizeV --Quantity of columns
+- rows --Quantity of rows
+- columns --Quantity of columns
 - size --The size of each cell
 - time --The time between each move(milliseconds)
 - contain --The id of the div that contains the loader
@@ -27,9 +27,9 @@ You can configure the loader with these options
 ### Available Options
 Options | Values | Default Value
 ------- | ------ | -------------
-type | "life","ant" | "life"
-sizeH | > 4 | 12
-sizeV | > 4 | 12
+type | "life","ant","tardis" | "life"
+rows | > 4 | 12
+columns | > 4 | 12
 size | > 2 | 5
 time | > 200 | 500
 border | true or false | true
@@ -45,7 +45,7 @@ style | "primary", "not-primary" | "default"
 ### How to configure it
 ```javascript
 loader.type = 'life';
-loader.setSize(rows,columns) or loader.sizeH=10;loader.sizeV=10;
+loader.setSize(rows,columns) or loader.rows=10;loader.columns=10;
 loader.time = 500;
 loader.destiny = 'divLoader';
 loader.border = true;
@@ -54,7 +54,7 @@ loader.style = 'primary'; loader.style = 'danger'; loader.style = 'not-danger';
 
 ### Actions
 ```javascript
-loader.setSize(row,columns); //Set the rows and columns
+loader.setSize(rows,columns); //Set the rows and columns
 loader.generate(); //It's executed with the constructor, but you can call it anytime. It generates the board
 loader.start(); //Starts the movement of the loader
 loader.stop(); //Stop the loader and hides it
