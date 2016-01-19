@@ -4,7 +4,6 @@ function GeekLoader(){
 	this.type = 'life';
 	this.setSize();
 	this.positionsLife = [];
-	this.generate();
 	this.contain = 'loader';
 	this.size = 5;
 	this.timer;
@@ -288,6 +287,7 @@ GeekLoader.prototype.setSize = function(h,v){
 }
 
 GeekLoader.prototype.start = function(){
+	this.generate();
 	this.loadBrick();
 	this.setFigure();
 	var that = this;
