@@ -16,7 +16,7 @@ function GeekLoader(){
 };
 
 GeekLoader.prototype.getTypesAvailable = function(){
-	return ['life','ant','tardis'];
+	return ['life','ant','tardis','invaders'];
 };
 
 GeekLoader.prototype.checkType = function(){
@@ -25,16 +25,26 @@ GeekLoader.prototype.checkType = function(){
 };
 
 GeekLoader.prototype.checkSize = function(){
-	if(this.type=='tardis')
+	var row,column;
+	switch(this.type)
 	{
-		if(this.rows < 14) this.rows = 14;
-		if(this.columns < 9) this.columns = 9;
+		case 'tardis':
+			row=(this.rows < 14) ? 14 : this.rows;
+			column = (this.columns < 9) ? 9 : this.columns;
+			break;
+		case 'invaders':
+			row=(this.rows < 10) ? 10 : this.rows;
+			column=(this.columns < 13) ? 13 : this.columns;
+			break;
+		case 'ant':
+		case 'life':
+		default:
+			row = (this.rows < 4) ? 4 : this.rows;
+			column = (this.columns < 4) ? 4 : this.columns;
+			break;
 	}
-	else
-	{
-		if(this.rows < 4) this.rows = 4;
-		if(this.columns < 4) this.columns = 4;
-	}
+	this.rows = row;
+	this.columns = column;
 };
 
 GeekLoader.prototype.generate = function(){
@@ -56,39 +66,60 @@ GeekLoader.prototype.generate = function(){
 				cantGenerated++;
 			}
 
-		}while(cantGenerated < limit)
+		}while(cantGenerated < limit);
 	}
 	else if(this.type == 'tardis')
 	{
 		this.positionsLife = this.getTardisPositions();
 	}
+	else if(this.type == 'invaders')
+	{
+		this.positionsLife = this.getSpaceInvadersPositions();
+	}
 };
 
-GeekLoader.prototype.getTardisData = function(){
-	var tData = {}
-
-	if(this.columns < 6)
+GeekLoader.prototype.getSpaceInvadersPositions = function(){
+	var borderRSize,borderCSize;
+	var spaceInvadersPos = [];
+	var posNoBordes = ['1-3','1-9','2-4','2-8','3-3','3-4','3-5','3-6','3-7','3-8','3-9','4-2','4-3','4-5','4-6','4-7','4-9','4-10','5-1','5-2','5-3','5-4','5-5','5-6','5-7','5-8','5-9','5-10','5-11','6-1','6-3','6-4','6-5','6-6','6-7','6-8','6-9','6-11','7-1','7-3','7-9','7-11','8-4','8-5','8-7','8-8'];
+	if(((this.columns - 11) % 2 )!= 0)
 	{
-		tData.start = 1;
-		tData.end = this.columns;
-		tData.bottom = this.rows;
-		tData.top = 3;
+		this.columns++;
 	}
-	else
+	if(((this.rows - 8) % 2) != 0)
 	{
-		tData.start = 2;
-		tData.end = this.columns - 1;
-		tData.bottom = this.rows - 1;
-		tData.top = 5;
+		this.rows++;
 	}
 
-	return tData;
+	borderRSize = (this.rows - 8) / 2;
+	borderCSize = (this.columns - 11) / 2;
+
+	for(var i = 1; i <= this.rows;i++)
+	{
+		for(var j = 1; j <= this.columns;j++)
+		{
+			var posCheck = `${i}-${j}`;
+			if(~posNoBordes.indexOf(posCheck))
+			{
+				var pos = `${i+borderRSize}-${j+borderCSize}`;
+				spaceInvadersPos.push(pos);
+			}
+		}
+	}
+
+	return spaceInvadersPos;
 };
 
 GeekLoader.prototype.getTardisPositions = function(){
 	var posTardis = [];
 
-	var data = this.getTardisData();
+	var data = {
+		start:2,
+		end:this.columns-1,
+		bottom:this.rows-1,
+		top:5
+	};
+
 	this.lastRowT = this.rows;
 
 	for(var i = data.start; i <= data.end; i++)
@@ -161,7 +192,7 @@ GeekLoader.prototype.loadBrick = function(){
 	{
 		for ( var j = 1; j <= this.columns; j++)
 		{
-			especificBrick += `<div class="brickW" id="brick${i.toString()}-${j.toString()}-${this.contain}" style="left: ${posBrick_x}px; top: ${posBrick_y}px;${this.styleLoaded.brickW}"></div>`;
+			especificBrick += `<div class="brickW" id="brick${i}-${j}-${this.contain}" style="left: ${posBrick_x}px; top: ${posBrick_y}px;${this.styleLoaded.brickW}"></div>`;
 			posBrick_x += this.size;
 		}
 		posBrick_x = initialPos;
@@ -247,26 +278,24 @@ GeekLoader.prototype.getCSS = function(){
 			cA = `FF0303`;
 			break;
 	}
-	cssStyle = {
+	return {
 		brickW:`${s1}${cW}${s2}${cBr}${s3}`,
 		brickB:`${s1}${cB}${s2}${cBr}${s3}`,
 		brickR:`${sr}${cA}${s2}${cBr}${s3}`
 	}
-	return cssStyle;
 };
 
 GeekLoader.prototype.setFigure = function(){
 	switch(this.type){
 		case 'life':
 		case 'tardis':
+		case 'invaders':
 			var vFigure = this.positionsLife;
 			for(var i = 0; i < vFigure.length; i++)
 			{
 				var brickName= `brick${vFigure[i]}-${this.contain}`;
 				var bDiv = dDL.getElementById(brickName);
-				bDiv.className = 'brickB';
-				var style = `left:${bDiv.style.left};top:${bDiv.style.top};${this.styleLoaded.brickB}`;
-				bDiv.setAttribute('style',style);
+				this.setStyle(bDiv,'brickB',this.styleLoaded.brickB);
 			}
 			break;
 		case 'ant':
@@ -295,13 +324,50 @@ GeekLoader.prototype.start = function(){
 };
 
 GeekLoader.prototype.move = function(){
-	if(this.type == 'life')
-		this.moveCellG();
-	else if(this.type == 'ant')
-		this.moveCellA();
-	else if(this.type == 'tardis')
-		this.moveCellT();
+	switch(this.type)
+	{
+		case 'life': this.moveCellG(); break;
+		case 'ant' : this.moveCellA(); break;
+		case 'tardis' : this.moveCellT(); break;
+		case 'invaders' : this.moveCellI(); break;
+	}
 };
+
+GeekLoader.prototype.moveCellI = function()
+{
+	var posToCheck = ['3-1','3-11','4-1','4-11','6-1','6-2','6-10','6-11','7-1','7-11','8-2','8-4','8-5','8-7','8-8','8-10'];
+	var borderRSize = (this.rows - 8) / 2;
+	var borderCSize = (this.columns - 11) / 2;
+	var brickName,className,styleLoad,style;
+	for(var i = 1; i < this.rows; i++)
+	{
+		for(var j = 1; j < this.columns;j++)
+		{
+			var posCheck = `${i}-${j}`;
+			if(~posToCheck.indexOf(posCheck))
+			{
+				brickName = `brick${i+borderRSize}-${j+borderCSize}-${this.contain}`;
+				var bDiv = dDL.getElementById(brickName);
+				enter = false;
+				if(bDiv.className == 'brickB')
+				{
+					this.setStyle(bDiv,'brickW',this.styleLoaded.brickW);
+				}
+				else if(bDiv.className == 'brickW')
+				{
+					this.setStyle(bDiv,'brickB',this.styleLoaded.brickB);
+				}
+			}
+		}
+	}
+}
+
+GeekLoader.prototype.setStyle = function(div,cName,styleLoad)
+{
+	div.className = cName;
+	var style = `left:${div.style.left};top:${div.style.top};${styleLoad}`;
+	div.setAttribute('style',style);
+}
 
 GeekLoader.prototype.moveCellT = function()
 {
@@ -318,15 +384,11 @@ GeekLoader.prototype.moveCellT = function()
 		var bDiv = dDL.getElementById(brickName);
 		if(bDiv.className == 'brickB')
 		{
-				bDiv.className = 'brickW';
-				var style = `left:${bDiv.style.left};top:${bDiv.style.top};${this.styleLoaded.brickW}`;
-				bDiv.setAttribute('style',style);
+			this.setStyle(bDiv,'brickW',this.styleLoaded.brickW);
 		}
 		else if(bDiv.className == 'brickW' && (~this.positionsLife.indexOf(posName)))
 		{
-				bDiv.className = 'brickB';
-				var style = `left:${bDiv.style.left};top:${bDiv.style.top};${this.styleLoaded.brickB}`;
-				bDiv.setAttribute('style',style);
+			this.setStyle(bDiv,'brickB',this.styleLoaded.brickB);
 		}
 	}
 };
@@ -345,17 +407,13 @@ GeekLoader.prototype.moveCellG = function()
 			cantOfLivingCells = countCells(i,j,this);
 			if(bDiv.className == 'brickB' && ((cantOfLivingCells < 2) || (cantOfLivingCells > 3)))
 			{
-					bDiv.className = 'brickW';
-					var style = `left:${bDiv.style.left};top:${bDiv.style.top};${this.styleLoaded.brickW}`;
-					bDiv.setAttribute('style',style);
-					move = true;
+				this.setStyle(bDiv,'brickW',this.styleLoaded.brickW);
+				move = true;
 			}
 			else if(bDiv.className == 'brickW' && (cantOfLivingCells == 3))
 			{
-					bDiv.className = 'brickB';
-					var style = `left:${bDiv.style.left};top:${bDiv.style.top};${this.styleLoaded.brickB}`;
-					bDiv.setAttribute('style',style);
-					move = true;
+				this.setStyle(bDiv,'brickB',this.styleLoaded.brickB);
+				move = true;
 			}
 		}
 	}
@@ -397,33 +455,44 @@ GeekLoader.prototype.moveCellA = function()
 	var noMove = false;
 	aDiv = dDL.getElementById(antName);
 
+	vA0 = 0;
+	vA1 = 0;
+
 	if(aDiv.className == 'brickW')
 	{
 		className = 'brickB';
-		classS = `left:${aDiv.style.left};top:${aDiv.style.top};${this.styleLoaded.brickB}`;
+		classS = this.styleLoaded.brickB;
 		switch(this.degree)
 		{
-			case 0:			
+			case 0:
 				if((parseInt(vAntName[0]) - 1) > 0)
-					newName = (parseInt(vAntName[0]) - 1) + '-' + vAntName[1];
+				{
+					vA0 = -1;
+				}
 					
 				this.degree = 90;
 				break;
 			case 90:
 				if((parseInt(vAntName[1]) + 1) <= this.columns)
-					newName = vAntName[0]+ '-' + (parseInt(vAntName[1]) + 1);
+				{
+					vA1 = 1;
+				}
 					
 				this.degree = 180;
 				break;
 			case 180:
 				if((parseInt(vAntName[0]) + 1) <= this.rows)
-					newName = (parseInt(vAntName[0]) + 1) + '-' + vAntName[1];
+				{
+					vA0 = 1;
+				}
 
 				this.degree = 270;
 				break;
 			case 270:
 				if((parseInt(vAntName[1]) - 1) > 0)
-					newName = vAntName[0]+ '-' + (parseInt(vAntName[1]) - 1);
+				{
+					vA1 = -1;
+				}
 
 				this.degree = 0;
 				break;
@@ -432,41 +501,50 @@ GeekLoader.prototype.moveCellA = function()
 	else
 	{
 		className = 'brickW';
-		classS = `left:${aDiv.style.left};top:${aDiv.style.top};${this.styleLoaded.brickW}`;
+		classS = this.styleLoaded.brickW;
 		switch(this.degree)
 		{
 			case 0:
 				if((parseInt(vAntName[0]) + 1) <= this.rows)
-					newName = (parseInt(vAntName[0]) + 1) + '-' + vAntName[1];
+				{
+					vA0 = 1;
+				}
 					
 				this.degree = 270;
 				break;
 			case 90:
 				if((parseInt(vAntName[1]) - 1) > 0)
-					newName = vAntName[0]+ '-' + (parseInt(vAntName[1]) - 1);
+				{
+					vA1 = -1;
+				}
 					
 				this.degree = 0;
 				break;
 			case 180:
 				if((parseInt(vAntName[0]) - 1) > 0)
-					newName = (parseInt(vAntName[0]) - 1) + '-' + vAntName[1];
+				{
+					vA0 = -1;
+				}
 					
 				this.degree = 90;
 				break;
 			case 270:
 				if((parseInt(vAntName[1]) + 1) <= this.columns)
-					newName = vAntName[0]+ '-' + (parseInt(vAntName[1]) + 1);
+				{
+					vA1 = 1;
+				}
 					
 				this.degree = 180;
 				break;
 		}
 	}
-	if(newName!=undefined)
+
+	if(vA0 != 0 || vA1 != 0)
 	{
+		newName = (parseInt(vAntName[0]) + vA0) + '-' + (parseInt(vAntName[1]) + vA1);
 		this.antPos = newName;
 		aDiv.innerHTML = '';
-		aDiv.className = className;
-		aDiv.setAttribute('style',classS);
+		this.setStyle(aDiv,className,classS);
 		nextPos = `brick${this.antPos}-${this.contain}`;
 		dDL.getElementById(nextPos).innerHTML = addAnt;
 	}
