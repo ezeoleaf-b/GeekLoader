@@ -1,9 +1,10 @@
 function GeekLoader(){
 	var dL = document;
 	var positionsLife=[];
+	var positionsExtra = [];
 	var styleLoaded={};
 	var degree=0;
-	var timer,antPos,lastRowT;
+	var timer,antPos,lastRowT,posEyesGhost;
 
 	this.type = 'life';
 	this.contain = 'loader';
@@ -61,6 +62,7 @@ function GeekLoader(){
 	this.generate = function(){
 		checkType(this);
 		checkSize(this);
+		positionsExtra = [];
 		switch(this.type)
 		{
 			case 'life':
@@ -86,7 +88,7 @@ function GeekLoader(){
 		var ghostPos = [];
 
 		var posNoBordes = ['1-6-9','2-4-11','3-3-12','4-2-4','4-7-10','4-13-13','5-2-3','5-8-9','6-2-3','6-8-9','7-1-3','7-8-9','7-14-14','8-1-4','8-7-10','8-13-14','9-1-14','10-1-14','11-1-14','12-1-14','13-1-2','13-4-6','13-9-11','13-13-14','14-1-1','14-5-6','14-9-10','14-14-14'];
-
+		var posEyes = ['6-6-7','6-12-13','7-6-7','7-12-13'];
 		borderRSize = (t.rows - 13) / 2;
 		borderCSize = (t.columns - 12) / 2;
 
@@ -100,6 +102,19 @@ function GeekLoader(){
 			{
 				var pos = `${(row+borderRSize)}-${j+borderCSize}`;	
 				ghostPos.push(pos);
+			}
+		}
+
+		for(var i = 0; i < posEyes.length;i++)
+		{
+			var vItem = posEyes[i].split('-');
+			var row = parseInt(vItem[0]);
+			var start = parseInt(vItem[1]);
+			var end = parseInt(vItem[2]);
+			for(var j = start - 1; j < end;j++)
+			{
+				var pos = `${(row+borderRSize)}-${j+borderCSize}`;	
+				positionsExtra.push(pos);
 			}
 		}
 
@@ -220,6 +235,18 @@ function GeekLoader(){
 
 		getTopTardis(t);
 		
+		for(var i = data.top; i < data.bottom;i++)
+		{
+			for(var j = data.start; j < data.end; j++)
+			{
+				pos = `${i}-${j}`;
+				if(posTardis.indexOf(pos) == -1)
+				{
+					positionsExtra.push(pos);
+				}
+			}
+		}
+
 		return posTardis.filter(function(elem, index) {
 			return posTardis.indexOf(elem) == index;
 		});
@@ -290,80 +317,119 @@ function GeekLoader(){
 				cBr = `2e6da4`;
 				cB = `fff`;
 				cA = `FF0303`;
+				cE = `FF0303`;
 				break;
 			case 'not-primary':
 				cW = `fff`;
 				cBr = `2e6da4`;
 				cB = `337ab7`;
 				cA = `FF0303`;
+				cE = `FF0303`;
 				break;
 			case 'success':
 				cW = `5cb85c`;
 				cBr = `4cae4c`;
 				cB = `fff`;
 				cA = `FF0303`;
+				cE = `FF0303`;
 				break;
 			case 'not-success':
 				cW = `fff`;
 				cBr = `4cae4c`;
 				cB = `5cb85c`;
 				cA = `FF0303`;
+				cE = `FF0303`;
 				break;
 			case 'info':
 				cW = `5bc0de`;
 				cBr = `46b8da`;
 				cB = `fff`;
 				cA = `FF0303`;
+				cE = `FF0303`;
 				break;
 			case 'not-info':
 				cW = `fff`;
 				cBr = `46b8da`;
 				cB = `5bc0de`;
 				cA = `FF0303`;
+				cE = `FF0303`;
 				break;
 			case 'warning':
 				cW = `f0ad4e`;
 				cBr = `eea236`;
 				cB = `fff`;
 				cA = `000`;
+				cE = `FF0303`;
 				break;
 			case 'not-warning':
 				cW = `fff`;
 				cBr = `eea236`;
 				cB = `f0ad4e`;
 				cA = `000`;
+				cE = `FF0303`;
 				break;
 			case 'danger':
 				cW = `d9534f`;
 				cBr = `d43f3a`;
 				cB = `fff`;
 				cA = `000`;
+				cE = `FF0303`;
 				break;
 			case 'not-danger':
 				cW = `fff`;
 				cBr = `d43f3a`;
 				cB = `d9534f`;
 				cA = `000`;
+				cE = `FF0303`;
 				break;
 			case 'pacman':
 				cW = `000`;
 				cBr = `FFEE00`;
 				cB = `FFEE00`;
 				cA = `FF0303`;
+				cE = `FF0303`;
 				break;
 			case 'not-pacman':
 				cW = `000`;
 				cBr = `FFEE00`;
 				cB = `FFEE00`;
 				cA = `FF0303`;
+				cE = `FF0303`;
 				break;
 			case 'blinky':
+				cW = `fff`;
+				cBr = `E11E1C`;
+				cB = `E11E1C`;
+				cA = `525FBB`;
+				cE = `525FBB`;
 				break;
 			case 'pinky':
+				cW = `fff`;
+				cBr = `E45593`;
+				cB = `E45593`;
+				cA = `525FBB`;
+				cE = `525FBB`;
 				break;
 			case 'inky':
+				cW = `fff`;
+				cBr = `6CCAD6`;
+				cB = `6CCAD6`;
+				cA = `525FBB`;
+				cE = `525FBB`;
 				break;
 			case 'clyde':
+				cW = `fff`;
+				cBr = `EF7E10`;
+				cB = `EF7E10`;
+				cA = `525FBB`;
+				cE = `525FBB`;
+				break;
+			case 'tardis':
+				cW = `fff`;
+				cBr = `13335C`;
+				cB = `13335C`;
+				cA = `194A88`;
+				cE = `163D6F`;
 				break;
 			case 'default':
 			default:
@@ -371,12 +437,14 @@ function GeekLoader(){
 				cBr = `999`;
 				cB = `000`;
 				cA = `FF0303`;
+				cE = `FF0303`;
 				break;
 		}
 		return {
 			brickW:`${s1}${cW}${s2}${cBr}${s3}`,
 			brickB:`${s1}${cB}${s2}${cBr}${s3}`,
-			brickR:`${sr}${cA}${s2}${cBr}${s3}`
+			brickR:`${sr}${cA}${s2}${cBr}${s3}`,
+			brickE:`${s1}${cE}${s2}${cBr}${s3}`
 		}
 	};
 
@@ -393,6 +461,16 @@ function GeekLoader(){
 					var brickName= `brick${vFigure[i]}-${this.contain}`;
 					var bDiv = dL.getElementById(brickName);
 					setStyle(bDiv,'brickB',styleLoaded.brickB,this);
+				}
+				if(positionsExtra.length > 0)
+				{
+					var vFigure = positionsExtra;
+					for(var i = 0; i < vFigure.length; i++)
+					{
+						var brickName= `brick${vFigure[i]}-${this.contain}`;
+						var bDiv = dL.getElementById(brickName);
+						setStyle(bDiv,'brickE',styleLoaded.brickE,this);
+					}	
 				}
 				break;
 			case 'ant':
@@ -423,11 +501,82 @@ function GeekLoader(){
 	this.move = function(){
 		switch(this.type)
 		{
-			case 'life': moveCellG(this); break;
+			case 'life': moveCellL(this); break;
 			case 'ant' : moveCellA(this); break;
 			case 'tardis' : moveCellT(this); break;
 			case 'invaders' : moveCellI(this); break;
 			case 'pacman' : moveCellP(this); break;
+			case 'ghost' : moveCellG(this); break;
+		}
+	};
+
+	var moveCellG = function(t)
+	{
+		var posToCheck = ['6-5','4-4','6-3','7-4'];
+		var borderRSize = (t.rows - 13) / 2;
+		var borderCSize = (t.columns - 12) / 2;
+		var brickName,className,eyesIndex;
+		var nextEyes = 0;
+
+		
+		for(var i = 0; i < posToCheck.length;i++)
+		{
+			var posData = posToCheck[i].split('-');
+			var rowCheck = parseInt(posData[0]);
+			var colCheck = parseInt(posData[1]);
+
+			brickName = `brick${rowCheck+borderRSize}-${colCheck+borderCSize}-${t.contain}`;
+			var bDiv = dL.getElementById(brickName);
+			if(bDiv.className == 'brickE')
+			{
+				eyesIndex = i;
+				break;
+			}
+		}
+		
+		nextEyes = (eyesIndex == (posToCheck.length - 1)) ? 0 : (eyesIndex + 1);
+
+		moveBrick(eyesIndex,'remove');
+		moveBrick(nextEyes,'add');
+
+		function moveBrick(index,type)
+		{
+			var data = posToCheck[index].split('-');
+			var row = parseInt(data[0]);
+			var col = parseInt(data[1]);
+
+			for(var i = 0; i <= 1 ;i++)
+			{
+				row += i;
+				for(var k = 0; k <= 6; k=k+6)
+				{
+					for(var j = 0; j <= 1;j++)
+					{
+						col += j + k;
+						var pos =  `${row+borderRSize}-${col+borderCSize}`;
+						brickName = `brick${row+borderRSize}-${col+borderCSize}-${t.contain}`;
+						var bDiv = dL.getElementById(brickName);
+
+						if(type=='remove')
+						{
+							if(positionsLife.indexOf(pos) == -1)
+							{
+								setStyle(bDiv,'brickW',styleLoaded.brickW,t);
+							}
+							else if(bDiv.className == 'brickW')
+							{
+								setStyle(bDiv,'brickB',styleLoaded.brickB,t);
+							}
+						}
+						else if(type=='add')
+						{
+							setStyle(bDiv, 'brickE',styleLoaded.brickE,t);
+						}
+
+						col = parseInt(data[1]);
+					}
+				}
+			}
 		}
 	};
 
@@ -499,7 +648,7 @@ function GeekLoader(){
 			posName = `${lastRowT}-${i}`;
 			brickName = `brick${lastRowT}-${i}-${t.contain}`;
 			var bDiv = dL.getElementById(brickName);
-			if(bDiv.className == 'brickB')
+			if(bDiv.className == 'brickB' || bDiv.className == 'brickE')
 			{
 				setStyle(bDiv,'brickW',styleLoaded.brickW,t);
 			}
@@ -507,10 +656,14 @@ function GeekLoader(){
 			{
 				setStyle(bDiv,'brickB',styleLoaded.brickB,t);
 			}
+			else if(bDiv.className == 'brickW' && (~positionsExtra.indexOf(posName)))
+			{
+				setStyle(bDiv,'brickE',styleLoaded.brickE,t);
+			}
 		}
 	};
 
-	var moveCellG = function(t)
+	var moveCellL = function(t)
 	{
 		var move = false;
 		var brickName;
