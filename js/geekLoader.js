@@ -4,7 +4,9 @@ function GeekLoader(){
 	var positionsExtra = [];
 	var styleLoaded={};
 	var degree=0;
-	var timer,antPos,lastRowT,posEyesGhost;
+	var timer,antPos,lastRowT,posEyesGhost,pos;
+	var borderRSize = 1;
+	var borderCSize = 1;
 
 	this.type = 'life';
 	this.contain = 'loader';
@@ -23,7 +25,7 @@ function GeekLoader(){
 	};
 
 	this.getTypesAvailable = function(){
-		return ['life','ant','tardis','invaders','pacman','ghost'];	
+		return ['life','ant','tardis','invaders','pacman','ghost','lightsaber-vertical'];	
 	};
 
 	var checkType = function(t){
@@ -48,6 +50,10 @@ function GeekLoader(){
 				row = 15;
 				column = 16;
 				break;
+			case 'lightsaber-vertical':
+				row = 17;
+				column = 4;
+				break;
 			case 'ant':
 			case 'life':
 			default:
@@ -60,61 +66,90 @@ function GeekLoader(){
 	};
 
 	this.generate = function(){
-		checkType(this);
-		checkSize(this);
+		var t = this;
+		checkType(t);
+		checkSize(t);
 		positionsExtra = [];
-		switch(this.type)
+		switch(t.type)
 		{
 			case 'life':
-				positionsLife = getLifePositions(this);
+				positionsLife = getLifePositions(t);
 				break;
 			case 'tardis':
-				positionsLife = getTardisPositions(this);
+				positionsLife = getTardisPositions(t);
 				break;
 			case 'invaders':
-				positionsLife = getSpaceInvadersPositions(this);
+				positionsLife = getSpaceInvadersPositions(t);
 				break;
 			case 'pacman':
-				positionsLife = getPacmanPositions(this);
+				positionsLife = getPacmanPositions(t);
 				break;
 			case 'ghost':
-				positionsLife = getGhostPositions(this);
+				positionsLife = getGhostPositions(t);
 				break;
+				/*
+			case 'lightsaber-vertical':
+				positionsLife = getLightSaberPositionsVertical(t);
+				break;
+				*/
 		}
 	};
+	/*
+	var getLightSaberPositionsVertical = function(t)
+	{
+		var lightSaberPos = [];
 
+		borderRSize = (t.rows - 15) / 2;
+		borderCSize = (t.columns - 2) / 2;
+
+		for(var i = 1; i <= 14; i++)
+		{
+			for(var j = 1; j <= 2;j++)
+			{
+				pos = `${(i+borderRSize)}-${j+borderCSize}`;
+				lightSaberPos.push(pos);
+			}
+		}
+
+		lastRowT = 12;
+
+		//Base
+		for(var i = 14; i <= 15; i++)
+		{
+			for(var j = 1; j <= 2;j++)
+			{
+				pos = `${(i+borderRSize)}-${j+borderCSize}`;
+				positionsExtra.push(pos);
+			}
+		}
+
+		return lightSaberPos;
+	}
+	*/
 	var getGhostPositions = function(t){
-		var borderRSize,borderCSize;
 		var ghostPos = [];
 
 		var posNoBordes = ['1-6-9','2-4-11','3-3-12','4-2-4','4-7-10','4-13-13','5-2-3','5-8-9','6-2-3','6-8-9','7-1-3','7-8-9','7-14-14','8-1-4','8-7-10','8-13-14','9-1-14','10-1-14','11-1-14','12-1-14','13-1-2','13-4-6','13-9-11','13-13-14','14-1-1','14-5-6','14-9-10','14-14-14'];
 		var posEyes = ['6-6-7','6-12-13','7-6-7','7-12-13'];
-		borderRSize = (t.rows - 13) / 2;
-		borderCSize = (t.columns - 12) / 2;
 
-		for(var i = 0; i < posNoBordes.length;i++)
+		for(var i = 1; i <= 2; i++)
 		{
-			var vItem = posNoBordes[i].split('-');
-			var row = parseInt(vItem[0]);
-			var start = parseInt(vItem[1]);
-			var end = parseInt(vItem[2]);
-			for(var j = start - 1; j < end;j++)
-			{
-				var pos = `${(row+borderRSize)}-${j+borderCSize}`;	
-				ghostPos.push(pos);
-			}
-		}
+			var vPos = (i==1) ? posNoBordes : posEyes;
 
-		for(var i = 0; i < posEyes.length;i++)
-		{
-			var vItem = posEyes[i].split('-');
-			var row = parseInt(vItem[0]);
-			var start = parseInt(vItem[1]);
-			var end = parseInt(vItem[2]);
-			for(var j = start - 1; j < end;j++)
+			for(var j = 0; j < vPos.length;j++)
 			{
-				var pos = `${(row+borderRSize)}-${j+borderCSize}`;	
-				positionsExtra.push(pos);
+				var vItem = vPos[j].split('-');
+				var row = parseInt(vItem[0]);
+				var start = parseInt(vItem[1]);
+				var end = parseInt(vItem[2]);
+				for(var k = start - 1; k < end;k++)
+				{
+					pos = `${(row+borderRSize)}-${k+borderCSize}`;
+					if(i == 1)
+						ghostPos.push(pos);
+					else
+						positionsExtra.push(pos);
+				}
 			}
 		}
 
@@ -122,13 +157,9 @@ function GeekLoader(){
 	};
 
 	var getPacmanPositions = function(t){
-		var borderRSize,borderCSize;
 		var pacmanPos = [];
 
 		var posNoBordes = ['5-9','3-11','2-12','2-12','1-10','1-7','1-5','1-7','1-10','2-12','2-12','3-11','5-9'];
-
-		borderRSize = (t.rows - 13) / 2;
-		borderCSize = (t.columns - 12) / 2;
 
 		for(var i = 0; i < posNoBordes.length;i++)
 		{
@@ -137,7 +168,7 @@ function GeekLoader(){
 			var end = parseInt(vItem[1]);
 			for(var j = start; j <= end;j++)
 			{
-				var pos = `${(i+1+borderRSize)}-${j+borderCSize}`;	
+				pos = `${(i+1+borderRSize)}-${j+borderCSize}`;	
 				pacmanPos.push(pos);
 			}
 		}
@@ -166,12 +197,8 @@ function GeekLoader(){
 	};
 
 	var getSpaceInvadersPositions = function(t){
-		var borderRSize,borderCSize;
 		var spaceInvadersPos = [];
 		var posNoBordes = ['1-3','1-9','2-4','2-8','3-3','3-4','3-5','3-6','3-7','3-8','3-9','4-2','4-3','4-5','4-6','4-7','4-9','4-10','5-1','5-2','5-3','5-4','5-5','5-6','5-7','5-8','5-9','5-10','5-11','6-1','6-3','6-4','6-5','6-6','6-7','6-8','6-9','6-11','7-1','7-3','7-9','7-11','8-4','8-5','8-7','8-8'];
-
-		borderRSize = (t.rows - 8) / 2;
-		borderCSize = (t.columns - 11) / 2;
 
 		for(var i = 1; i <= t.rows;i++)
 		{
@@ -180,7 +207,7 @@ function GeekLoader(){
 				var posCheck = `${i}-${j}`;
 				if(~posNoBordes.indexOf(posCheck))
 				{
-					var pos = `${i+borderRSize}-${j+borderCSize}`;
+					pos = `${i+borderRSize}-${j+borderCSize}`;
 					spaceInvadersPos.push(pos);
 				}
 			}
@@ -191,7 +218,6 @@ function GeekLoader(){
 
 	var getTardisPositions = function(t){
 		var posTardis = [];
-		var pos;
 		var data = {
 			start:2,
 			end:t.columns-1,
@@ -240,7 +266,7 @@ function GeekLoader(){
 			for(var j = data.start; j < data.end; j++)
 			{
 				pos = `${i}-${j}`;
-				if(posTardis.indexOf(pos) == -1)
+				if(!~posTardis.indexOf(pos))
 				{
 					positionsExtra.push(pos);
 				}
@@ -274,30 +300,31 @@ function GeekLoader(){
 
 	this.loadBrick = function(){
 		var especificBrick = '';
-		var classN;
-		var loaderDiv = dL.getElementById(this.contain);
+		var classN,t;
+		t = this;
+		var loaderDiv = dL.getElementById(t.contain);
 		var initialPos = loaderDiv.offsetLeft;
 		var posBrick_x = initialPos;
 		var posBrick_y = loaderDiv.offsetTop;
-		styleLoaded = getCSS(this);
-		for ( var i = 1; i <= this.rows; i++ ) 
+		styleLoaded = getCSS(t);
+		for ( var i = 1; i <= t.rows; i++ ) 
 		{
-			for ( var j = 1; j <= this.columns; j++)
+			for ( var j = 1; j <= t.columns; j++)
 			{
 				var styleLoad = styleLoaded.brickW;
 				var styleToLoad = styleLoad;
-				if(!this.background)
+				if(!t.background)
 				{
 					var indexBack =  styleLoad.indexOf('background-color');
 					var nextComa = styleLoad.indexOf(';',indexBack) + 1;
 					styleToLoad = styleLoad.slice(0,indexBack);
 					styleToLoad += styleLoad.slice(nextComa);
 				}
-				especificBrick += `<div class="brickW" id="brick${i}-${j}-${this.contain}" style="left: ${posBrick_x}px; top: ${posBrick_y}px;${styleToLoad}"></div>`;
-				posBrick_x += this.size;
+				especificBrick += `<div class="brickW" id="brick${i}-${j}-${t.contain}" style="left: ${posBrick_x}px; top: ${posBrick_y}px;${styleToLoad}"></div>`;
+				posBrick_x += t.size;
 			}
 			posBrick_x = initialPos;
-			posBrick_y += this.size;
+			posBrick_y += t.size;
 		}
 		loaderDiv.innerHTML = especificBrick;
 	};
@@ -431,6 +458,13 @@ function GeekLoader(){
 				cA = `194A88`;
 				cE = `163D6F`;
 				break;
+			case 'luke':
+				cW = `fff`;
+				cBr = `99D9EA`;
+				cB = `99D9EA`;
+				cA = `000`;
+				cE = `000`;
+				break;
 			case 'default':
 			default:
 				cW = `FFF`;
@@ -449,33 +483,35 @@ function GeekLoader(){
 	};
 
 	this.setFigure = function(){
-		switch(this.type){
+		var t = this;
+		switch(t.type){
 			case 'life':
 			case 'tardis':
 			case 'invaders':
 			case 'pacman':
 			case 'ghost':
+			case 'lightsaber-vertical':
 				var vFigure = positionsLife;
 				for(var i = 0; i < vFigure.length; i++)
 				{
-					var brickName= `brick${vFigure[i]}-${this.contain}`;
+					var brickName= `brick${vFigure[i]}-${t.contain}`;
 					var bDiv = dL.getElementById(brickName);
-					setStyle(bDiv,'brickB',styleLoaded.brickB,this);
+					setStyle(bDiv,'brickB',styleLoaded.brickB,t);
 				}
 				if(positionsExtra.length > 0)
 				{
 					var vFigure = positionsExtra;
 					for(var i = 0; i < vFigure.length; i++)
 					{
-						var brickName= `brick${vFigure[i]}-${this.contain}`;
+						var brickName= `brick${vFigure[i]}-${t.contain}`;
 						var bDiv = dL.getElementById(brickName);
-						setStyle(bDiv,'brickE',styleLoaded.brickE,this);
+						setStyle(bDiv,'brickE',styleLoaded.brickE,t);
 					}	
 				}
 				break;
 			case 'ant':
-				antPos = Math.floor(this.rows / 2)+'-'+Math.floor(this.columns / 2);
-				var brickName = `brick${antPos}-${this.contain}`;
+				antPos = Math.floor(t.rows / 2)+'-'+Math.floor(t.columns / 2);
+				var brickName = `brick${antPos}-${t.contain}`;
 				var bDiv = dL.getElementById(brickName);
 				var div = dL.createElement('div');
 				div.className = 'brickR';
@@ -491,30 +527,36 @@ function GeekLoader(){
 	}
 
 	this.start = function(){
-		this.generate();
-		this.loadBrick();
-		this.setFigure();
-		var that = this;
-		timer = setInterval(function(){that.move()},this.time);
+		var t = this;
+		t.generate();
+		t.loadBrick();
+		t.setFigure();
+		timer = setInterval(function(){t.move()},t.time);
 	};
 
 	this.move = function(){
+		var t = this;
 		switch(this.type)
 		{
-			case 'life': moveCellL(this); break;
-			case 'ant' : moveCellA(this); break;
-			case 'tardis' : moveCellT(this); break;
-			case 'invaders' : moveCellI(this); break;
-			case 'pacman' : moveCellP(this); break;
-			case 'ghost' : moveCellG(this); break;
+			case 'life': moveCellL(t); break;
+			case 'ant' : moveCellA(t); break;
+			case 'tardis' : moveCellT(t); break;
+			case 'invaders' : moveCellI(t); break;
+			case 'pacman' : moveCellP(t); break;
+			case 'ghost' : moveCellG(t); break;
+			//case 'lightsaber-vertical' : moveCellLSV(this); break;
 		}
 	};
+	/*
+	var moveCellLSV = function(t)
+	{
+
+	}
+	*/
 
 	var moveCellG = function(t)
 	{
 		var posToCheck = ['6-5','4-4','6-3','7-4'];
-		var borderRSize = (t.rows - 13) / 2;
-		var borderCSize = (t.columns - 12) / 2;
 		var brickName,className,eyesIndex;
 		var nextEyes = 0;
 
@@ -553,13 +595,13 @@ function GeekLoader(){
 					for(var j = 0; j <= 1;j++)
 					{
 						col += j + k;
-						var pos =  `${row+borderRSize}-${col+borderCSize}`;
+						pos = `${row+borderRSize}-${col+borderCSize}`;
 						brickName = `brick${row+borderRSize}-${col+borderCSize}-${t.contain}`;
 						var bDiv = dL.getElementById(brickName);
 
 						if(type=='remove')
 						{
-							if(positionsLife.indexOf(pos) == -1)
+							if(!~positionsLife.indexOf(pos))
 							{
 								setStyle(bDiv,'brickW',styleLoaded.brickW,t);
 							}
@@ -583,8 +625,6 @@ function GeekLoader(){
 	var moveCellP = function(t)
 	{
 		var posToCheck = ['5-11-13','6-8-13','7-6-13','8-8-13','9-11-13'];
-		var borderRSize = (t.rows - 13) / 2;
-		var borderCSize = (t.columns - 12) / 2;
 		var brickName,className,styleLoad,style;
 
 		for(var i = 0; i < posToCheck.length;i++)
@@ -612,8 +652,6 @@ function GeekLoader(){
 	var moveCellI = function(t)
 	{
 		var posToCheck = ['3-1','3-11','4-1','4-11','6-1','6-2','6-10','6-11','7-1','7-11','8-2','8-4','8-5','8-7','8-8','8-10'];
-		var borderRSize = (t.rows - 8) / 2;
-		var borderCSize = (t.columns - 11) / 2;
 		var brickName,className,styleLoad,style;
 		for(var i = 1; i < t.rows; i++)
 		{
@@ -721,7 +759,7 @@ function GeekLoader(){
 		var nextPos;
 		var antName = `brick${antPos}-${t.contain}`;
 		var vAntName = antPos.split('-');
-		var newName,className,classS;
+		var newName,className,classS,vA0,vA1;
 		aDiv = dL.getElementById(antName);
 
 		vA0 = 0;
