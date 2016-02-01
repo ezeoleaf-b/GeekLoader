@@ -492,6 +492,31 @@ function GeekLoader(){
 			case 'ghost':
 			case 'lightsaber-vertical':
 				var vFigure = positionsLife;
+				/*
+				var nameStyle, style;
+				for(var i = 1; i <= 2; i++)
+				{
+					if(i==1)
+					{
+						vFigure = positionsLife;
+						nameStyle = 'brickB';
+						style = styleLoaded.brickB;
+					}
+					else if(positionsExtra.length > 0)
+					{
+						vFigure = positionsExtra;
+						nameStyle = 'brickE';
+						style = styleLoaded.brickE;
+					}
+					for(var j = 0; j < vFigure.length; j++)
+					{
+						var brickName= `brick${vFigure[j]}-${t.contain}`;
+						var bDiv = dL.getElementById(brickName);
+						setStyle(bDiv,nameStyle,style,t);
+					}
+				}
+				*/
+				
 				for(var i = 0; i < vFigure.length; i++)
 				{
 					var brickName= `brick${vFigure[i]}-${t.contain}`;
@@ -508,6 +533,7 @@ function GeekLoader(){
 						setStyle(bDiv,'brickE',styleLoaded.brickE,t);
 					}	
 				}
+				
 				break;
 			case 'ant':
 				antPos = Math.floor(t.rows / 2)+'-'+Math.floor(t.columns / 2);
