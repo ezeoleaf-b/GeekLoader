@@ -25,7 +25,7 @@ function GeekLoader(){
 	};
 
 	this.getTypesAvailable = function(){
-		return ['life','ant','tardis','invaders','pacman','ghost','lightsaber-vertical'];	
+		return ['life','ant','tardis','invaders','pacman','ghost'];	
 	};
 
 	var checkType = function(t){
@@ -87,45 +87,9 @@ function GeekLoader(){
 			case 'ghost':
 				positionsLife = getGhostPositions(t);
 				break;
-				/*
-			case 'lightsaber-vertical':
-				positionsLife = getLightSaberPositionsVertical(t);
-				break;
-				*/
 		}
 	};
-	/*
-	var getLightSaberPositionsVertical = function(t)
-	{
-		var lightSaberPos = [];
 
-		borderRSize = (t.rows - 15) / 2;
-		borderCSize = (t.columns - 2) / 2;
-
-		for(var i = 1; i <= 14; i++)
-		{
-			for(var j = 1; j <= 2;j++)
-			{
-				pos = `${(i+borderRSize)}-${j+borderCSize}`;
-				lightSaberPos.push(pos);
-			}
-		}
-
-		lastRowT = 12;
-
-		//Base
-		for(var i = 14; i <= 15; i++)
-		{
-			for(var j = 1; j <= 2;j++)
-			{
-				pos = `${(i+borderRSize)}-${j+borderCSize}`;
-				positionsExtra.push(pos);
-			}
-		}
-
-		return lightSaberPos;
-	}
-	*/
 	var getGhostPositions = function(t){
 		var ghostPos = [];
 
@@ -484,66 +448,35 @@ function GeekLoader(){
 
 	this.setFigure = function(){
 		var t = this;
-		switch(t.type){
-			case 'life':
-			case 'tardis':
-			case 'invaders':
-			case 'pacman':
-			case 'ghost':
-			case 'lightsaber-vertical':
-				var vFigure = positionsLife;
-				/*
-				var nameStyle, style;
-				for(var i = 1; i <= 2; i++)
-				{
-					if(i==1)
-					{
-						vFigure = positionsLife;
-						nameStyle = 'brickB';
-						style = styleLoaded.brickB;
-					}
-					else if(positionsExtra.length > 0)
-					{
-						vFigure = positionsExtra;
-						nameStyle = 'brickE';
-						style = styleLoaded.brickE;
-					}
-					for(var j = 0; j < vFigure.length; j++)
-					{
-						var brickName= `brick${vFigure[j]}-${t.contain}`;
-						var bDiv = dL.getElementById(brickName);
-						setStyle(bDiv,nameStyle,style,t);
-					}
-				}
-				*/
-				
+		if(t.type === 'ant')
+		{
+			antPos = Math.floor(t.rows / 2)+'-'+Math.floor(t.columns / 2);
+			var brickName = `brick${antPos}-${t.contain}`;
+			var bDiv = dL.getElementById(brickName);
+			var div = dL.createElement('div');
+			div.className = 'brickR';
+			div.setAttribute('style',styleLoaded.brickR);
+			bDiv.appendChild(div);
+		}
+		else
+		{
+			var vFigure = positionsLife;
+			for(var i = 0; i < vFigure.length; i++)
+			{
+				var brickName= `brick${vFigure[i]}-${t.contain}`;
+				var bDiv = dL.getElementById(brickName);
+				setStyle(bDiv,'brickB',styleLoaded.brickB,t);
+			}
+			if(positionsExtra.length > 0)
+			{
+				var vFigure = positionsExtra;
 				for(var i = 0; i < vFigure.length; i++)
 				{
 					var brickName= `brick${vFigure[i]}-${t.contain}`;
 					var bDiv = dL.getElementById(brickName);
-					setStyle(bDiv,'brickB',styleLoaded.brickB,t);
-				}
-				if(positionsExtra.length > 0)
-				{
-					var vFigure = positionsExtra;
-					for(var i = 0; i < vFigure.length; i++)
-					{
-						var brickName= `brick${vFigure[i]}-${t.contain}`;
-						var bDiv = dL.getElementById(brickName);
-						setStyle(bDiv,'brickE',styleLoaded.brickE,t);
-					}	
-				}
-				
-				break;
-			case 'ant':
-				antPos = Math.floor(t.rows / 2)+'-'+Math.floor(t.columns / 2);
-				var brickName = `brick${antPos}-${t.contain}`;
-				var bDiv = dL.getElementById(brickName);
-				var div = dL.createElement('div');
-				div.className = 'brickR';
-				div.setAttribute('style',styleLoaded.brickR);
-				bDiv.appendChild(div);
-				break;
+					setStyle(bDiv,'brickE',styleLoaded.brickE,t);
+				}	
+			}
 		}
 	};
 
@@ -570,15 +503,8 @@ function GeekLoader(){
 			case 'invaders' : moveCellI(t); break;
 			case 'pacman' : moveCellP(t); break;
 			case 'ghost' : moveCellG(t); break;
-			//case 'lightsaber-vertical' : moveCellLSV(this); break;
 		}
 	};
-	/*
-	var moveCellLSV = function(t)
-	{
-
-	}
-	*/
 
 	var moveCellG = function(t)
 	{
