@@ -33,19 +33,19 @@ You can configure the loader with these options
 ### Available Options
 Options | Values | Default Value
 ------- | ------ | -------------
-type | "life","ant","tardis" | "life"
+type | "life","ant","tardis","invaders","pacman","ghost" | "life"
 rows | > 4 | 12
 columns | > 4 | 12
 size | > 2 | 5
 time | > 200 | 500
 border | true or false | true
 contain | Any div's ID | "loader"
-style | "primary", "not-primary" | "default"
-" |    "success", "not-success"
-" | "info", "not-info"
-" | "warning", "not-warning"
-" | "danger", "not-danger"
-" | "default"
+style | "primary", "not-primary", "pacman" | "default"
+      |    "success", "not-success", "blinky"
+      | "info", "not-info", "pinky"
+      | "warning", "not-warning", "inky"
+      | "danger", "not-danger", "clyde"
+      | "default", "tardis",
 
 
 ### How to configure it
@@ -53,7 +53,7 @@ style | "primary", "not-primary" | "default"
 loader.type = 'life';
 loader.setSize(rows,columns) or loader.rows=10;loader.columns=10;
 loader.time = 500;
-loader.destiny = 'divLoader';
+loader.contain = 'divLoader';
 loader.border = true;
 loader.style = 'primary'; loader.style = 'danger'; loader.style = 'not-danger';
 ```
