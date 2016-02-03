@@ -204,18 +204,18 @@ function GeekLoader(){
 
 	var getSpaceInvadersPositions = function(t){
 		var spaceInvadersPos = [];
-		var posNoBordes = ['1-3','1-9','2-4','2-8','3-3','3-4','3-5','3-6','3-7','3-8','3-9','4-2','4-3','4-5','4-6','4-7','4-9','4-10','5-1','5-2','5-3','5-4','5-5','5-6','5-7','5-8','5-9','5-10','5-11','6-1','6-3','6-4','6-5','6-6','6-7','6-8','6-9','6-11','7-1','7-3','7-9','7-11','8-4','8-5','8-7','8-8'];
+		var posNoBordes = ['1-3-3','1-9-9','2-4-4','2-8-8','3-3-9','4-2-3','4-5-7','4-9-10','5-1-11','6-1-1','6-3-9','6-11-11','7-1-1','7-3-3','7-9-9','7-11-11','8-4-5','8-7-8']
 
-		for(var i = 1; i <= t.rows;i++)
+		for(var i = 0; i < posNoBordes.length;i++)
 		{
-			for(var j = 1; j <= t.columns;j++)
+			var vItem = posNoBordes[i].split('-');
+			var row = parseInt(vItem[0]);
+			var start = parseInt(vItem[1]);
+			var end = parseInt(vItem[2]);
+			for(var j = start; j <= end; j++)
 			{
-				var posCheck = `${i}-${j}`;
-				if(~posNoBordes.indexOf(posCheck))
-				{
-					pos = `${i+borderRSize}-${j+borderCSize}`;
-					spaceInvadersPos.push(pos);
-				}
+				var pos = `${(row+borderRSize)}-${j+borderCSize}`;
+				spaceInvadersPos.push(pos);
 			}
 		}
 
