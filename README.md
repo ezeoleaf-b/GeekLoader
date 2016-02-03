@@ -1,6 +1,12 @@
 # GeekLoader
 GeekLoader is a loader made with Javascript and CSS so you can replace the boring loaders with [John Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) or with [Langton's ant](https://en.wikipedia.org/wiki/Langton%27s_ant)
 
+## Examples
+
+Type | Ghost | Ghost | Invaders | Invaders | Pacman | Pacman | Tardis
+---- | ----- | ----- | -------- | -------- | ------ | ------ | ------
+     |![clyde](https://cloud.githubusercontent.com/assets/10358977/12769464/e8910d76-c9f6-11e5-94ea-3ff96aee1ee9.gif) | ![blinky](https://cloud.githubusercontent.com/assets/10358977/12769566/ba50f542-c9f7-11e5-819d-55a252d9a0cd.gif) | ![tardis](https://cloud.githubusercontent.com/assets/10358977/12769567/be5bdb3e-c9f7-11e5-9bdd-3dd7100c1100.gif) | ![not-danger](https://cloud.githubusercontent.com/assets/10358977/12769568/be843f16-c9f7-11e5-9b34-6d8442b81d5e.gif) | ![pacman](https://cloud.githubusercontent.com/assets/10358977/12769577/ccbe79a2-c9f7-11e5-8b19-0aeb2d22ea00.gif) | ![not-primary](https://cloud.githubusercontent.com/assets/10358977/12769578/ccc58512-c9f7-11e5-9b9d-547e2a3501aa.gif) | ![tardis](https://cloud.githubusercontent.com/assets/10358977/12769579/cccb434e-c9f7-11e5-8772-4a9a707dbf97.gif)
+
 ## How to use it
 First add geekLoader.js to your file.
 ```
