@@ -33,19 +33,19 @@ You can configure the loader with these options
 ### Available Options
 Options | Values | Default Value
 ------- | ------ | -------------
-type | "life","ant","tardis","invaders","pacman","ghost" | "life"
+type | life,ant,tardis,invaders,pacman,ghost | life
 rows | > 4 | 12
 columns | > 4 | 12
 size | > 2 | 5
 time | > 200 | 500
 border | true or false | true
-contain | Any div's ID | "loader"
-style | "primary", "not-primary", "pacman" | "default"
-      |    "success", "not-success", "blinky"
-      | "info", "not-info", "pinky"
-      | "warning", "not-warning", "inky"
-      | "danger", "not-danger", "clyde"
-      | "default", "tardis",
+contain | Any div's ID | loader
+style | primary, not-primary, pacman | default
+      | success, not-success, blinky
+      | info, not-info, pinky
+      | warning, not-warning, inky
+      | danger, not-danger, clyde
+      | default, tardis
 
 
 ### How to configure it
