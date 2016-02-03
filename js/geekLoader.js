@@ -25,7 +25,7 @@ function GeekLoader(){
 	};
 
 	this.getTypesAvailable = function(){
-		return ['life','ant','tardis','invaders','pacman','ghost'];	
+		return ['life','ant','tardis','invaders','pacman','ghost','heart'];	
 	};
 
 	var checkType = function(t){
@@ -53,6 +53,10 @@ function GeekLoader(){
 			case 'lightsaber-vertical':
 				row = 17;
 				column = 4;
+				break;
+			case 'heart':
+				row = 10;
+				column = 11;
 				break;
 			case 'ant':
 			case 'life':
@@ -87,7 +91,45 @@ function GeekLoader(){
 			case 'ghost':
 				positionsLife = getGhostPositions(t);
 				break;
+			case 'heart':
+				positionsLife = getHeartPositions(t);
+				break;
 		}
+	};
+
+	var getHeartPositions = function(t){
+		var heartPos = [];
+		var posNoBordes = ['2-3-4','2-6-7','3-2-8','4-2-8','5-3-7','6-4-6','7-5-5'];
+		var posExtra = ['1-3-4','1-6-7','8-5-5'];
+
+		lastRowT = 1;
+
+		for(var i = 1; i <= 2; i++)
+		{
+			var vPos = (i==1) ? posNoBordes : posExtra;
+			var sum = (i==1) ? 1 : 0;
+			for(var j = 0; j < vPos.length;j++)
+			{
+				var vItem = vPos[j].split('-');
+				var row = parseInt(vItem[0]);
+				var start = parseInt(vItem[1]);
+				var end = parseInt(vItem[2]);
+				for(var k = start - sum; k <= end + sum;k++)
+				{
+					pos = `${(row+borderRSize)}-${k+borderCSize}`;
+					if(i == 2 || k == (start - 1) || k == (end + 1))
+					{
+						positionsExtra.push(pos);
+					}
+					else
+					{
+						heartPos.push(pos);
+					}
+				}
+			}
+		}
+
+		return heartPos;
 	};
 
 	var getGhostPositions = function(t){
@@ -503,6 +545,28 @@ function GeekLoader(){
 			case 'invaders' : moveCellI(t); break;
 			case 'pacman' : moveCellP(t); break;
 			case 'ghost' : moveCellG(t); break;
+			case 'heart' : moveCellH(t); break;
+		}
+	};
+
+	var moveCellH = function(t)
+	{
+		var brickName,posName;
+		lastRowT = ((lastRowT + 1) == (t.rows - 1)) ? 2 : lastRowT + 1;
+		
+		for(var i = 1; i <= t.columns; i++)
+		{
+			posName = `${lastRowT}-${i}`;
+			brickName = `brick${lastRowT}-${i}-${t.contain}`;
+			var bDiv = dL.getElementById(brickName);
+			if(bDiv.className == 'brickB')
+			{
+				setStyle(bDiv,'brickW',styleLoaded.brickW,t);
+			}
+			else if(bDiv.className == 'brickW' && (~positionsLife.indexOf(posName)))
+			{
+				setStyle(bDiv,'brickB',styleLoaded.brickB,t);
+			}
 		}
 	};
 

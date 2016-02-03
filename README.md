@@ -1,5 +1,12 @@
 # GeekLoader
-GeekLoader is a loader made with Javascript and CSS so you can replace the boring loaders with [John Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) or with [Langton's ant](https://en.wikipedia.org/wiki/Langton%27s_ant)
+GeekLoader is a loader made with Javascript so you can replace the boring loaders with different types:
+* [John Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life)
+* [Langton's ant](https://en.wikipedia.org/wiki/Langton%27s_ant)
+* SpaceInvaders Alien
+* Pacman
+* Ghost (From Pacman)
+* Tardis
+* Heart (From The legend of Zelda)
 
 ## Examples
 
@@ -29,6 +36,7 @@ You can configure the loader with these options
 - contain --The id of the div that contains the loader
 - border --If every cell has border or not
 - style --Use bootstrap styles to give every cell colors
+- background --Show or hide the background
 
 ### Available Options
 Options | Values | Default Value
@@ -39,6 +47,7 @@ columns | > 4 | 12
 size | > 2 | 5
 time | > 200 | 500
 border | true or false | true
+background | true or false | true
 contain | Any div's ID | loader
 style | primary, not-primary, pacman | default
       | success, not-success, blinky
@@ -54,14 +63,16 @@ loader.type = 'life';
 loader.setSize(rows,columns) or loader.rows=10;loader.columns=10;
 loader.time = 500;
 loader.contain = 'divLoader';
-loader.border = true;
+loader.border = false;
+loader.background = false;
 loader.style = 'primary'; loader.style = 'danger'; loader.style = 'not-danger';
 ```
 
 ### Actions
 ```javascript
-loader.setSize(rows,columns); //Set the rows and columns
-loader.generate(); //It's executed with the constructor, but you can call it anytime. It generates the board
+loader.setSize(rows,columns); //Set the rows and columns (Just for John Conway's Game of Life and Langton's Ant)
+loader.generate(); //It's executed with the constructor, but you can call it anytime. It generates the board (Only for John Conway's Game of Life)
+loader.randomType() //Pick a random type of loader every time
 loader.start(); //Starts the movement of the loader
 loader.stop(); //Stop the loader and hides it
 ```
