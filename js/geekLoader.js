@@ -4,7 +4,7 @@ function GeekLoader(){
 	var positionsExtra = [];
 	var styleLoaded={};
 	var degree=0;
-	var timer,antPos,lastRowT,posEyesGhost,pos;
+	var timer,antPos,lastRowT,pos;
 	var borderRSize = 1;
 	var borderCSize = 1;
 
@@ -341,140 +341,25 @@ function GeekLoader(){
 		
 		switch(t.style)
 		{
-			case 'primary':
-				cW = `337ab7`;
-				cBr = `2e6da4`;
-				cB = `fff`;
-				cA = `FF0303`;
-				cE = `FF0303`;
-				break;
-			case 'not-primary':
-				cW = `fff`;
-				cBr = `2e6da4`;
-				cB = `337ab7`;
-				cA = `FF0303`;
-				cE = `FF0303`;
-				break;
-			case 'success':
-				cW = `5cb85c`;
-				cBr = `4cae4c`;
-				cB = `fff`;
-				cA = `FF0303`;
-				cE = `FF0303`;
-				break;
-			case 'not-success':
-				cW = `fff`;
-				cBr = `4cae4c`;
-				cB = `5cb85c`;
-				cA = `FF0303`;
-				cE = `FF0303`;
-				break;
-			case 'info':
-				cW = `5bc0de`;
-				cBr = `46b8da`;
-				cB = `fff`;
-				cA = `FF0303`;
-				cE = `FF0303`;
-				break;
-			case 'not-info':
-				cW = `fff`;
-				cBr = `46b8da`;
-				cB = `5bc0de`;
-				cA = `FF0303`;
-				cE = `FF0303`;
-				break;
-			case 'warning':
-				cW = `f0ad4e`;
-				cBr = `eea236`;
-				cB = `fff`;
-				cA = `000`;
-				cE = `FF0303`;
-				break;
-			case 'not-warning':
-				cW = `fff`;
-				cBr = `eea236`;
-				cB = `f0ad4e`;
-				cA = `000`;
-				cE = `FF0303`;
-				break;
-			case 'danger':
-				cW = `d9534f`;
-				cBr = `d43f3a`;
-				cB = `fff`;
-				cA = `000`;
-				cE = `FF0303`;
-				break;
-			case 'not-danger':
-				cW = `fff`;
-				cBr = `d43f3a`;
-				cB = `d9534f`;
-				cA = `000`;
-				cE = `FF0303`;
-				break;
-			case 'pacman':
-				cW = `000`;
-				cBr = `FFEE00`;
-				cB = `FFEE00`;
-				cA = `FF0303`;
-				cE = `FF0303`;
-				break;
-			case 'not-pacman':
-				cW = `000`;
-				cBr = `FFEE00`;
-				cB = `FFEE00`;
-				cA = `FF0303`;
-				cE = `FF0303`;
-				break;
-			case 'blinky':
-				cW = `fff`;
-				cBr = `E11E1C`;
-				cB = `E11E1C`;
-				cA = `525FBB`;
-				cE = `525FBB`;
-				break;
-			case 'pinky':
-				cW = `fff`;
-				cBr = `E45593`;
-				cB = `E45593`;
-				cA = `525FBB`;
-				cE = `525FBB`;
-				break;
-			case 'inky':
-				cW = `fff`;
-				cBr = `6CCAD6`;
-				cB = `6CCAD6`;
-				cA = `525FBB`;
-				cE = `525FBB`;
-				break;
-			case 'clyde':
-				cW = `fff`;
-				cBr = `EF7E10`;
-				cB = `EF7E10`;
-				cA = `525FBB`;
-				cE = `525FBB`;
-				break;
-			case 'tardis':
-				cW = `fff`;
-				cBr = `13335C`;
-				cB = `13335C`;
-				cA = `194A88`;
-				cE = `163D6F`;
-				break;
-			case 'luke':
-				cW = `fff`;
-				cBr = `99D9EA`;
-				cB = `99D9EA`;
-				cA = `000`;
-				cE = `000`;
-				break;
-			case 'default':
-			default:
-				cW = `FFF`;
-				cBr = `999`;
-				cB = `000`;
-				cA = `FF0303`;
-				cE = `FF0303`;
-				break;
+			case 'primary': cW = `337ab7`;cBr = `2e6da4`;cB = `fff`;cA = `FF0303`;cE = `FF0303`; break;
+			case 'not-primary':	cW = `fff`;cBr = `2e6da4`;cB = `337ab7`;cA = `FF0303`;cE = `FF0303`;break;
+			case 'success': cW = `5cb85c`;cBr = `4cae4c`;cB = `fff`;cA = `FF0303`;cE = `FF0303`;break;
+			case 'not-success': cW = `fff`;cBr = `4cae4c`;cB = `5cb85c`;cA = `FF0303`;cE = `FF0303`;break;
+			case 'info': cW = `5bc0de`;cBr = `46b8da`;cB = `fff`;cA = `FF0303`;cE = `FF0303`;break;
+			case 'not-info': cW = `fff`;cBr = `46b8da`;cB = `5bc0de`;cA = `FF0303`;cE = `FF0303`;break;
+			case 'warning': cW = `f0ad4e`;cBr = `eea236`;cB = `fff`;cA = `000`;cE = `FF0303`;break;
+			case 'not-warning': cW = `fff`;cBr = `eea236`;cB = `f0ad4e`;cA = `000`;cE = `FF0303`;break;
+			case 'danger': cW = `d9534f`;cBr = `d43f3a`;cB = `fff`;cA = `000`;cE = `FF0303`;break;
+			case 'not-danger': cW = `fff`;cBr = `d43f3a`;cB = `d9534f`;cA = `000`;cE = `FF0303`;break;
+			case 'pacman': cW = `000`;cBr = `FFEE00`;cB = `FFEE00`;cA = `FF0303`;cE = `FF0303`;break;
+			case 'not-pacman': cW = `000`;cBr = `FFEE00`;cB = `FFEE00`;cA = `FF0303`;cE = `FF0303`;break;
+			case 'blinky': cW = `fff`;cBr = `E11E1C`;cB = `E11E1C`;cA = `525FBB`;cE = `525FBB`;break;
+			case 'pinky': cW = `fff`;cBr = `E45593`;cB = `E45593`;cA = `525FBB`;cE = `525FBB`;break;
+			case 'inky': cW = `fff`;cBr = `6CCAD6`;cB = `6CCAD6`;cA = `525FBB`;cE = `525FBB`;break;
+			case 'clyde': cW = `fff`;cBr = `EF7E10`;cB = `EF7E10`;cA = `525FBB`;cE = `525FBB`;break;
+			case 'tardis': cW = `fff`;cBr = `13335C`;cB = `13335C`;cA = `194A88`;cE = `163D6F`;break;
+			case 'luke': cW = `fff`;cBr = `99D9EA`;cB = `99D9EA`;cA = `000`;cE = `000`;break;
+			case 'default': default: cW = `FFF`;cBr = `999`;cB = `000`;cA = `FF0303`;cE = `FF0303`;break;
 		}
 		return {
 			brickW:`${s1}${cW}${s2}${cBr}${s3}`,
@@ -569,7 +454,7 @@ function GeekLoader(){
 	var moveCellG = function(t)
 	{
 		var posToCheck = ['6-5','4-4','6-3','7-4'];
-		var brickName,className,eyesIndex;
+		var brickName,eyesIndex;
 		var nextEyes = 0;
 
 		
@@ -637,7 +522,6 @@ function GeekLoader(){
 	var moveCellP = function(t)
 	{
 		var posToCheck = ['5-11-13','6-8-13','7-6-13','8-8-13','9-11-13'];
-		var brickName,className,styleLoad,style;
 
 		for(var i = 0; i < posToCheck.length;i++)
 		{
@@ -647,7 +531,7 @@ function GeekLoader(){
 			var endCheck = parseInt(posData[2]);
 			for(var j = startCheck; j <= endCheck; j++)
 			{
-				brickName = `brick${rowCheck+borderRSize}-${j+borderCSize}-${t.contain}`;
+				var brickName = `brick${rowCheck+borderRSize}-${j+borderCSize}-${t.contain}`;
 				var bDiv = dL.getElementById(brickName);
 				if(bDiv.className == 'brickB')
 				{
@@ -664,7 +548,6 @@ function GeekLoader(){
 	var moveCellI = function(t)
 	{
 		var posToCheck = ['3-1','3-11','4-1','4-11','6-1','6-2','6-10','6-11','7-1','7-11','8-2','8-4','8-5','8-7','8-8','8-10'];
-		var brickName,className,styleLoad,style;
 		for(var i = 1; i < t.rows; i++)
 		{
 			for(var j = 1; j < t.columns;j++)
@@ -672,9 +555,8 @@ function GeekLoader(){
 				var posCheck = `${i}-${j}`;
 				if(~posToCheck.indexOf(posCheck))
 				{
-					brickName = `brick${i+borderRSize}-${j+borderCSize}-${t.contain}`;
+					var brickName = `brick${i+borderRSize}-${j+borderCSize}-${t.contain}`;
 					var bDiv = dL.getElementById(brickName);
-					enter = false;
 					if(bDiv.className == 'brickB')
 					{
 						setStyle(bDiv,'brickW',styleLoaded.brickW,t);
