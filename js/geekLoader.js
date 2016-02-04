@@ -1,12 +1,12 @@
 function GeekLoader(){
-	var dL = document;
-	var positionsLife=[];
-	var positionsExtra = [];
-	var styleLoaded={};
-	var degree=0;
-	var timer,antPos,lastRowT,pos;
-	var borderRSize = 1;
-	var borderCSize = 1;
+	var dL = document,
+		positionsLife=[],
+		positionsExtra = [],
+		styleLoaded={},
+		degree=0,
+		timer,antPos,lastRowT,pos,
+		borderRSize = 1,
+		borderCSize = 1;
 
 	this.type = 'life';
 	this.contain = 'loader';
