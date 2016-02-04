@@ -204,7 +204,7 @@ function GeekLoader(){
 
 	var getSpaceInvadersPositions = function(t){
 		var spaceInvadersPos = [];
-		var posNoBordes = ['1-3-3','1-9-9','2-4-4','2-8-8','3-3-9','4-2-3','4-5-7','4-9-10','5-1-11','6-1-1','6-3-9','6-11-11','7-1-1','7-3-3','7-9-9','7-11-11','8-4-5','8-7-8']
+		var posNoBordes = ['1-3-3','1-9-9','2-4-4','2-8-8','3-3-9','4-2-3','4-5-7','4-9-10','5-1-11','6-1-1','6-3-9','6-11-11','7-1-1','7-3-3','7-9-9','7-11-11','8-4-5','8-7-8'];
 
 		for(var i = 0; i < posNoBordes.length;i++)
 		{
@@ -288,11 +288,7 @@ function GeekLoader(){
 			var middle = [];
 			var from = 2;
 			var midP = parseInt((t.columns) / 2);
-			if((t.columns % 2 == 0))
-				middle = [midP,(midP+1)];
-			else
-				middle = [midP+1];
-
+			middle = (t.columns % 2 == 0) ? [midP,(midP+1)] : middle = [midP+1];
 			for(var i = from; i < (data.bottom);i++)
 			{
 				for(var j = 0; j < middle.length;j++)
@@ -317,14 +313,14 @@ function GeekLoader(){
 		{
 			for ( var j = 1; j <= t.columns; j++)
 			{
-				var styleLoad = styleLoaded.brickW;
-				var styleToLoad = styleLoad;
+				var s = styleLoaded.brickW;
+				var styleToLoad = s;
 				if(!t.background)
 				{
-					var indexBack =  styleLoad.indexOf('background-color');
-					var nextComa = styleLoad.indexOf(';',indexBack) + 1;
-					styleToLoad = styleLoad.slice(0,indexBack);
-					styleToLoad += styleLoad.slice(nextComa);
+					var indexBack =  s.indexOf('background-color');
+					var nextComa = s.indexOf(';',indexBack) + 1;
+					styleToLoad = s.slice(0,indexBack);
+					styleToLoad += s.slice(nextComa);
 				}
 				especificBrick += `<div class="brickW" id="brick${i}-${j}-${t.contain}" style="left: ${posBrick_x}px; top: ${posBrick_y}px;${styleToLoad}"></div>`;
 				posBrick_x += t.size;
