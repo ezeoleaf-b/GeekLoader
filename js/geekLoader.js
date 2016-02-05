@@ -4,7 +4,7 @@ function GeekLoader(){
 		positionsExtra = [],
 		styleLoaded={},
 		degree=0,
-		timer,antPos,lastRowT,pos,
+		timer,antPos,lastRowT,pos,length,
 		borderRSize = 1,
 		borderCSize = 1;
 
@@ -25,7 +25,7 @@ function GeekLoader(){
 	};
 
 	this.getTypesAvailable = function(){
-		return ['life','ant','tardis','invaders','pacman','ghost','heart'];	
+		return ['life','ant','tardis','invaders','pacman','ghost','heart'];
 	};
 
 	var checkType = function(t){
@@ -45,10 +45,13 @@ function GeekLoader(){
 				row = 10;
 				column = 13;
 				break;
-			case 'pacman':
 			case 'ghost':
 				row = 15;
 				column = 16;
+				break;
+			case 'pacman':
+				row = 17;
+				column = 18;
 				break;
 			case 'lightsaber-vertical':
 				row = 17;
@@ -108,7 +111,8 @@ function GeekLoader(){
 		{
 			var vPos = (i==1) ? posNoBordes : posExtra;
 			var sum = (i==1) ? 1 : 0;
-			for(var j = 0; j < vPos.length;j++)
+			length = vPos.length;
+			for(var j = 0; j < length;j++)
 			{
 				var vItem = vPos[j].split('-');
 				var row = parseInt(vItem[0]);
@@ -141,8 +145,8 @@ function GeekLoader(){
 		for(var i = 1; i <= 2; i++)
 		{
 			var vPos = (i==1) ? posNoBordes : posEyes;
-
-			for(var j = 0; j < vPos.length;j++)
+			length = vPos.length;
+			for(var j = 0; j < length;j++)
 			{
 				var vItem = vPos[j].split('-');
 				var row = parseInt(vItem[0]);
@@ -165,16 +169,17 @@ function GeekLoader(){
 	var getPacmanPositions = function(t){
 		var pacmanPos = [];
 
-		var posNoBordes = ['5-9','3-11','2-12','2-12','1-10','1-7','1-5','1-7','1-10','2-12','2-12','3-11','5-9'];
-
-		for(var i = 0; i < posNoBordes.length;i++)
+		var posNoBordes = ['6-11','4-13','3-14','2-15','2-15','1-13','1-10','1-7','1-10','1-13','2-15','2-15','3-14','4-13','6-11'];
+		length = posNoBordes.length;
+		for(var i = 0; i < length;i++)
 		{
 			var vItem = posNoBordes[i].split('-');
+			var row = i + 1;
 			var start = parseInt(vItem[0]);
 			var end = parseInt(vItem[1]);
 			for(var j = start; j <= end;j++)
 			{
-				pos = `${(i+1+borderRSize)}-${j+borderCSize}`;	
+				pos = `${(row+borderRSize)}-${j+borderCSize}`;	
 				pacmanPos.push(pos);
 			}
 		}
@@ -205,8 +210,8 @@ function GeekLoader(){
 	var getSpaceInvadersPositions = function(t){
 		var spaceInvadersPos = [];
 		var posNoBordes = ['1-3-3','1-9-9','2-4-4','2-8-8','3-3-9','4-2-3','4-5-7','4-9-10','5-1-11','6-1-1','6-3-9','6-11-11','7-1-1','7-3-3','7-9-9','7-11-11','8-4-5','8-7-8'];
-
-		for(var i = 0; i < posNoBordes.length;i++)
+		length = posNoBordes.length;
+		for(var i = 0; i < length;i++)
 		{
 			var vItem = posNoBordes[i].split('-');
 			var row = parseInt(vItem[0]);
@@ -322,7 +327,7 @@ function GeekLoader(){
 					styleToLoad = s.slice(0,indexBack);
 					styleToLoad += s.slice(nextComa);
 				}
-				especificBrick += `<div class="brickW" id="brick${i}-${j}-${t.contain}" style="left: ${posBrick_x}px; top: ${posBrick_y}px;${styleToLoad}"></div>`;
+				especificBrick += `<div class="brickW" id="brick${i}-${j}-${t.contain}" style="left:${posBrick_x}px;top:${posBrick_y}px;${styleToLoad}"></div>`;
 				posBrick_x += t.size;
 			}
 			posBrick_x = initialPos;
@@ -384,7 +389,8 @@ function GeekLoader(){
 		else
 		{
 			var vFigure = positionsLife;
-			for(var i = 0; i < vFigure.length; i++)
+			length = vFigure.length;
+			for(var i = 0; i < length; i++)
 			{
 				var brickName= `brick${vFigure[i]}-${t.contain}`;
 				var bDiv = dL.getElementById(brickName);
@@ -393,7 +399,8 @@ function GeekLoader(){
 			if(positionsExtra.length > 0)
 			{
 				var vFigure = positionsExtra;
-				for(var i = 0; i < vFigure.length; i++)
+				length = vFigure.length;
+				for(var i = 0; i < length; i++)
 				{
 					var brickName= `brick${vFigure[i]}-${t.contain}`;
 					var bDiv = dL.getElementById(brickName);
@@ -457,8 +464,8 @@ function GeekLoader(){
 		var brickName,eyesIndex;
 		var nextEyes = 0;
 
-		
-		for(var i = 0; i < posToCheck.length;i++)
+		length = posToCheck.length;
+		for(var i = 0; i < length;i++)
 		{
 			var posData = posToCheck[i].split('-');
 			var rowCheck = parseInt(posData[0]);
@@ -473,7 +480,7 @@ function GeekLoader(){
 			}
 		}
 		
-		nextEyes = (eyesIndex == (posToCheck.length - 1)) ? 0 : (eyesIndex + 1);
+		nextEyes = (eyesIndex == (length - 1)) ? 0 : (eyesIndex + 1);
 
 		moveBrick(eyesIndex,'remove');
 		moveBrick(nextEyes,'add');
@@ -521,9 +528,9 @@ function GeekLoader(){
 
 	var moveCellP = function(t)
 	{
-		var posToCheck = ['5-11-13','6-8-13','7-6-13','8-8-13','9-11-13'];
-
-		for(var i = 0; i < posToCheck.length;i++)
+		var posToCheck = ['6-14-16','7-11-16','8-8-16','9-11-16','10-14-16'];
+		length = posToCheck.length;
+		for(var i = 0; i < length;i++)
 		{
 			var posData = posToCheck[i].split('-');
 			var rowCheck = parseInt(posData[0]);
