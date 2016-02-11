@@ -25,7 +25,7 @@ function GeekLoader(){
 	};
 
 	this.getTypesAvailable = function(){
-		return ['life','ant','tardis','invaders','pacman','ghost','heart'];
+		return ['life','ant','tardis','invaders','pacman','ghost','heart','batman','adipose'];
 	};
 
 	var checkType = function(t){
@@ -61,6 +61,14 @@ function GeekLoader(){
 				row = 10;
 				column = 11;
 				break;
+			case 'batman':
+				row = 16;
+				column = 37;
+				break;
+			case 'adipose':
+				row = 16;
+				column = 19;
+				break;
 			case 'ant':
 			case 'life':
 			default:
@@ -79,25 +87,83 @@ function GeekLoader(){
 		positionsExtra = [];
 		switch(t.type)
 		{
-			case 'life':
-				positionsLife = getLifePositions(t);
-				break;
-			case 'tardis':
-				positionsLife = getTardisPositions(t);
-				break;
-			case 'invaders':
-				positionsLife = getSpaceInvadersPositions(t);
-				break;
-			case 'pacman':
-				positionsLife = getPacmanPositions(t);
-				break;
-			case 'ghost':
-				positionsLife = getGhostPositions(t);
-				break;
-			case 'heart':
-				positionsLife = getHeartPositions(t);
-				break;
+			case 'life': positionsLife = getLifePositions(t);break;
+			case 'tardis': positionsLife = getTardisPositions(t);break;
+			case 'invaders': positionsLife = getSpaceInvadersPositions(t);break;
+			case 'pacman': positionsLife = getPacmanPositions(t);break;
+			case 'ghost': positionsLife = getGhostPositions(t);break;
+			case 'heart': positionsLife = getHeartPositions(t);break;
+			case 'batman': positionsLife = getBatmanPositions(t);break;
+			case 'adipose' : positionsLife = getAdiposePositions(t);break;
 		}
+	};
+
+	var getAdiposePositions = function(t){
+		var adiposePos = [];
+		var posNoBordes = ['1-6-12','2-5-13','3-4-14','4-4-14','5-4-6','5-8-10','5-12-14','6-3-15','7-2-16','8-1-6','8-8-10','8-12-17','9-1-2','9-4-7','9-11-14','9-16-17','10-4-14','11-4-14','12-5-13','13-5-13','14-6-8','14-10-12'];
+		var posExtra = ['5-7-7','5-11-11','8-7-7','8-11-11','9-8-10'];
+
+		for(var i = 1; i <= 2; i++)
+		{
+			var vPos = (i==1) ? posNoBordes : posExtra;
+			length = vPos.length;
+			for(var j = 0; j < length; j++)
+			{
+				var vItem = vPos[j].split('-');
+				var row = parseInt(vItem[0]);
+				var start = parseInt(vItem[1]);
+				var end = parseInt(vItem[2]);
+				for(var k = start; k <= end;k++)
+				{
+					pos = `${(row+borderRSize)}-${k+borderCSize}`;
+					if(i == 2)
+					{
+						positionsExtra.push(pos);
+					}
+					else
+					{
+						adiposePos.push(pos);
+					}
+				}
+			}
+		}
+
+		return adiposePos;
+	};
+
+	var getBatmanPositions = function(t){
+		var batmanPos = [];
+		var posNoBordes = ['2-2-12','2-24-34','3-4-13','3-23-32','4-5-14','4-22-31','5-6-30','6-6-30','7-6-30','8-5-31','9-4-32','10-10-26','11-14-22','12-16-20','13-17-19'];
+		var posExtra = ['1-1-12','1-24-35','2-17-17','2-19-19','3-3-3','3-17-19','3-33-33','4-15-21','10-5-9','10-27-31','11-11-13','11-23-25','12-15-15','12-21-21','14-18-18'];
+
+		lastRowT = 1;
+
+		for(var i = 1; i <= 2; i++)
+		{
+			var vPos = (i==1) ? posNoBordes : posExtra;
+			length = vPos.length;
+			for(var j = 0; j < length; j++)
+			{
+				var vItem = vPos[j].split('-');
+				var row = parseInt(vItem[0]);
+				var start = parseInt(vItem[1]);
+				var end = parseInt(vItem[2]);
+				for(var k = start; k <= end;k++)
+				{
+					pos = `${(row+borderRSize)}-${k+borderCSize}`;
+					if(i == 2 || k == start || k == end)
+					{
+						positionsExtra.push(pos);
+					}
+					else
+					{
+						batmanPos.push(pos);
+					}
+				}
+			}
+		}
+
+		return batmanPos;
 	};
 
 	var getHeartPositions = function(t){
@@ -364,6 +430,8 @@ function GeekLoader(){
 			case 'clyde': cW = `fff`;cBr = `EF7E10`;cB = `EF7E10`;cA = `525FBB`;cE = `525FBB`;break;
 			case 'tardis': cW = `fff`;cBr = `13335C`;cB = `13335C`;cA = `194A88`;cE = `163D6F`;break;
 			case 'luke': cW = `fff`;cBr = `99D9EA`;cB = `99D9EA`;cA = `000`;cE = `000`;break;
+			case 'batman' : cW = `fff`;cBr = `000`;cB = `000`;cA = `FFEF21`;cE = `FFEF21`;break;
+			case 'adipose' : cW = `fff`;cBr = `F3F3F3`;cB = `F3F3F3`;cA = `000`;cE = `000`;break;
 			case 'default': default: cW = `FFF`;cBr = `999`;cB = `000`;cA = `FF0303`;cE = `FF0303`;break;
 		}
 		return {
@@ -434,6 +502,50 @@ function GeekLoader(){
 			case 'pacman' : moveCellP(t); break;
 			case 'ghost' : moveCellG(t); break;
 			case 'heart' : moveCellH(t); break;
+			case 'batman' : moveCellB(t); break;
+			case 'adipose' : moveCellAd(t); break;
+		}
+	};
+
+	var moveCellAd = function(t){
+		var posToCheck = ['5-1','5-2','6-1','6-2','8-1','8-2','9-1','9-2'];
+		var length = posToCheck.length;
+		for(var i = 0; i < length; i++)
+		{
+			var vPos = posToCheck[i].split('-');
+			var row = parseInt(vPos[0]);
+			var col = parseInt(vPos[1]);
+			var brickName = `brick${row+borderRSize}-${col+borderCSize}-${t.contain}`;
+			var bDiv = dL.getElementById(brickName);
+			if(bDiv.className == 'brickB')
+			{
+				setStyle(bDiv,'brickW',styleLoaded.brickW,t);
+			}
+			else if(bDiv.className == 'brickW')
+			{
+				setStyle(bDiv,'brickB',styleLoaded.brickB,t);
+			}
+		}
+	};
+
+	var moveCellB = function(t)
+	{
+		var brickName,posName;
+		lastRowT = ((lastRowT + 1) == (t.rows - 1)) ? 2 : lastRowT + 1;
+		
+		for(var i = 1; i <= t.columns; i++)
+		{
+			posName = `${lastRowT}-${i}`;
+			brickName = `brick${lastRowT}-${i}-${t.contain}`;
+			var bDiv = dL.getElementById(brickName);
+			if(bDiv.className == 'brickB')
+			{
+				setStyle(bDiv,'brickW',styleLoaded.brickW,t);
+			}
+			else if(bDiv.className == 'brickW' && (~positionsLife.indexOf(posName)))
+			{
+				setStyle(bDiv,'brickB',styleLoaded.brickB,t);
+			}
 		}
 	};
 
