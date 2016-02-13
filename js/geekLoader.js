@@ -25,7 +25,7 @@ function GeekLoader(){
 	};
 
 	this.getTypesAvailable = function(){
-		return ['life','ant','tardis','invaders','pacman','ghost','heart','batman','adipose'];
+		return ['life','ant','tardis','invaders','pacman','ghost','heart','batman','adipose','mushroom'];
 	};
 
 	var checkType = function(t){
@@ -69,6 +69,10 @@ function GeekLoader(){
 				row = 16;
 				column = 19;
 				break;
+			case 'mushroom':
+				row = 18;
+				column = 18;
+				break;
 			case 'ant':
 			case 'life':
 			default:
@@ -95,7 +99,41 @@ function GeekLoader(){
 			case 'heart': positionsLife = getHeartPositions(t);break;
 			case 'batman': positionsLife = getBatmanPositions(t);break;
 			case 'adipose' : positionsLife = getAdiposePositions(t);break;
+			case 'mushroom' : positionsLife = getMushroomPositions(t);break;
 		}
+	};
+
+	var getMushroomPositions = function(t){
+		var mushroomPos = [];
+		var posNoBordes = ['1-6-11','2-4-6','2-11-13','3-3-4','3-13-14','4-2-3','4-14-15','5-2-2','5-15-15','6-1-2','6-15-16','7-1-1','7-16-16','8-1-1','8-16-16','9-1-1','9-16-16','10-1-1','10-16-16','11-1-1','11-4-13','11-16-16','12-1-4','12-7-7','12-10-10','12-13-16','13-2-3','13-7-7','13-10-10','13-14-15','14-3-3','14-14-14','15-3-4','15-13-14','16-4-13'];
+		var posExtra = ['2-8-9','3-8-9','4-4-4','4-7-10','4-13-13','5-4-13','6-5-6','6-11-12','7-5-5','7-12-12','8-5-5','8-12-12','9-5-5','9-12-12','10-2-6','10-11-15','11-2-3','11-14-15'];
+
+		for(var i = 1; i <= 2; i++)
+		{
+			var vPos = (i==1) ? posNoBordes : posExtra;
+			length = vPos.length;
+			for(var j = 0; j < length; j++)
+			{
+				var vItem = vPos[j].split('-');
+				var row = parseInt(vItem[0]);
+				var start = parseInt(vItem[1]);
+				var end = parseInt(vItem[2]);
+				for(var k = start; k <= end;k++)
+				{
+					pos = `${(row+borderRSize)}-${k+borderCSize}`;
+					if(i == 2)
+					{
+						positionsExtra.push(pos);
+					}
+					else
+					{
+						mushroomPos.push(pos);
+					}
+				}
+			}
+		}
+
+		return mushroomPos;
 	};
 
 	var getAdiposePositions = function(t){
@@ -432,6 +470,8 @@ function GeekLoader(){
 			case 'luke': cW = `fff`;cBr = `99D9EA`;cB = `99D9EA`;cA = `000`;cE = `000`;break;
 			case 'batman' : cW = `fff`;cBr = `000`;cB = `000`;cA = `FFEF21`;cE = `FFEF21`;break;
 			case 'adipose' : cW = `fff`;cBr = `F3F3F3`;cB = `F3F3F3`;cA = `000`;cE = `000`;break;
+			case 'player1' : cW = `fff`;cBr = `000`;cB = `000`;cA = `CB0808`; cE = `CB0808`;break;
+			case 'player2' : cW = `fff`;cBr = `000`;cB = `000`;cA = `00BA14`; cE = `00BA14`;break;
 			case 'default': default: cW = `FFF`;cBr = `999`;cB = `000`;cA = `FF0303`;cE = `FF0303`;break;
 		}
 		return {
@@ -504,6 +544,28 @@ function GeekLoader(){
 			case 'heart' : moveCellH(t); break;
 			case 'batman' : moveCellB(t); break;
 			case 'adipose' : moveCellAd(t); break;
+			case 'mushroom' : moveCellM(t); break;
+		}
+	};
+
+	var moveCellM = function(t){
+		var posToCheck = ['13-7','13-10','14-6','15-7','15-8','15-9','15-10','14-11'];
+		var length = posToCheck.length;
+		for(var i = 0; i < length; i++)
+		{
+			var vPos = posToCheck[i].split('-');
+			var row = parseInt(vPos[0]);
+			var col = parseInt(vPos[1]);
+			var brickName = `brick${row+borderRSize}-${col+borderCSize}-${t.contain}`;
+			var bDiv = dL.getElementById(brickName);
+			if(bDiv.className == 'brickB')
+			{
+				setStyle(bDiv,'brickW',styleLoaded.brickW,t);
+			}
+			else if(bDiv.className == 'brickW')
+			{
+				setStyle(bDiv,'brickB',styleLoaded.brickB,t);
+			}
 		}
 	};
 
