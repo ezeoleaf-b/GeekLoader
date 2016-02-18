@@ -25,7 +25,7 @@ function GeekLoader(){
 	};
 
 	this.getTypesAvailable = function(){
-		return ['life','ant','tardis','invaders','pacman','ghost','heart','batman','adipose','mushroom'];
+		return ['life','ant','tardis','invaders','pacman','ghost','heart','batman','adipose','mushroom','t-rex','andy'];
 	};
 
 	var checkType = function(t){
@@ -38,8 +38,8 @@ function GeekLoader(){
 		switch(t.type)
 		{
 			case 'tardis':
-				row = 18;
-				column = 11;
+				row = 19;
+				column = 13;
 				break;
 			case 'invaders':
 				row = 10;
@@ -73,6 +73,14 @@ function GeekLoader(){
 				row = 18;
 				column = 18;
 				break;
+			case 'andy':
+				row = 41;
+				column = 32;
+				break;
+			case 't-rex':
+				row = 24;
+				column = 22;
+				break;
 			case 'ant':
 			case 'life':
 			default:
@@ -92,203 +100,115 @@ function GeekLoader(){
 		switch(t.type)
 		{
 			case 'life': positionsLife = getLifePositions(t);break;
-			case 'tardis': positionsLife = getTardisPositions(t);break;
-			case 'invaders': positionsLife = getSpaceInvadersPositions(t);break;
-			case 'pacman': positionsLife = getPacmanPositions(t);break;
-			case 'ghost': positionsLife = getGhostPositions(t);break;
-			case 'heart': positionsLife = getHeartPositions(t);break;
-			case 'batman': positionsLife = getBatmanPositions(t);break;
-			case 'adipose' : positionsLife = getAdiposePositions(t);break;
-			case 'mushroom' : positionsLife = getMushroomPositions(t);break;
+			case 'tardis': positionsLife = getTardisPositions();break;
+			case 'invaders': positionsLife = getSpaceInvadersPositions();break;
+			case 'pacman': positionsLife = getPacmanPositions();break;
+			case 'ghost': positionsLife = getGhostPositions();break;
+			case 'heart': positionsLife = getHeartPositions();break;
+			case 'batman': positionsLife = getBatmanPositions();break;
+			case 'adipose': positionsLife = getAdiposePositions();break;
+			case 'mushroom': positionsLife = getMushroomPositions();break;
+			case 'andy': positionsLife = getAndyPositions();break;
+			case 't-rex': positionsLife = getTRexPositions();break;
 		}
 	};
 
-	var getMushroomPositions = function(t){
-		var mushroomPos = [];
+	var generatePositions = function(original,extra,borders)
+	{
+		borders = (borders==undefined) ? false : borders;
+		var count = (extra==undefined) ? 1 : 2;
+		var genPos = [];
+		for(var i = 1; i <= count; i++)
+		{
+			var vPos = (i==1) ? original : extra;
+			length = vPos.length;
+			for(var j = 0; j < length; j++)
+			{
+				var vItem = vPos[j].split('-');
+				var row = parseInt(vItem[0]);
+				var start = parseInt(vItem[1]);
+				var end = parseInt(vItem[2]);
+				for(var k = start; k <= end;k++)
+				{
+					pos = `${(row+borderRSize)}-${k+borderCSize}`;
+
+					var condition = (borders) ? (k == start || k == end) : false;	
+
+					if(i == 2 || condition)
+					{
+						positionsExtra.push(pos);
+					}
+					else
+					{
+						genPos.push(pos);
+					}
+				}
+			}
+		}
+		return genPos;
+	}
+
+	var getTRexPositions = function(){
+		var posNoBordes = ['1-12-19','2-11-20','3-11-12','3-14-20','4-11-20','5-11-20','6-11-20','7-11-15','8-11-18','9-1-1','9-10-14','10-1-1','10-9-14','11-1-2','11-7-16','12-1-3','12-6-14','12-16-16','13-1-14','14-1-14','15-2-14','16-3-13','17-4-12','18-5-11','19-6-8','19-10-12','20-6-7','21-6-6','22-6-7'];
+		var extraPos = ['3-13-13'];
+		return generatePositions(posNoBordes,extraPos);
+	};
+
+	var getAndyPositions = function(){
+		var posNoBordes = ['2-8-10','2-21-23','3-9-11','3-13-18','3-20-22','4-10-21','5-9-22','6-8-23','7-7-11','7-12-19','7-20-24','8-7-11','8-12-19','8-20-24','9-6-25','10-6-25','11-6-25','13-2-5','13-6-25','13-26-29','14-1-6','14-6-25','14-25-30','15-1-6','15-6-25','15-25-30','16-1-6','16-6-25','16-25-30','17-1-6','17-6-25','17-25-30','18-1-6','18-6-25','18-25-30','19-1-6','19-6-25','19-25-30','20-1-6','20-6-25','20-25-30','21-1-6','21-6-25','21-25-30','22-1-6','22-6-25','22-25-30','23-1-6','23-6-25','23-25-30','24-1-6','24-6-25','24-25-30','25-2-5','25-6-25','25-26-29','26-6-25','27-6-25','28-6-25','29-6-25','30-6-25','31-7-24','32-9-14','32-17-22','33-9-14','33-17-22','34-9-14','34-17-22','35-9-14','35-17-22','36-9-14','36-17-22','37-9-14','37-17-22','38-10-13','38-18-21'];
+		var extraPos = ['1-8-9','1-22-23','2-14-17','3-12-12','3-19-19','12-3-4','12-6-25','12-27-28','26-3-4','26-27-28','32-8-8','32-15-16','32-23-23','39-11-12','39-19-20'];
+		lastRowT = 0;
+		return generatePositions(posNoBordes,extraPos,true);
+	};
+
+	var getMushroomPositions = function(){
 		var posNoBordes = ['1-6-11','2-4-6','2-11-13','3-3-4','3-13-14','4-2-3','4-14-15','5-2-2','5-15-15','6-1-2','6-15-16','7-1-1','7-16-16','8-1-1','8-16-16','9-1-1','9-16-16','10-1-1','10-16-16','11-1-1','11-4-13','11-16-16','12-1-4','12-7-7','12-10-10','12-13-16','13-2-3','13-7-7','13-10-10','13-14-15','14-3-3','14-14-14','15-3-4','15-13-14','16-4-13'];
-		var posExtra = ['2-8-9','3-8-9','4-4-4','4-7-10','4-13-13','5-4-13','6-5-6','6-11-12','7-5-5','7-12-12','8-5-5','8-12-12','9-5-5','9-12-12','10-2-6','10-11-15','11-2-3','11-14-15'];
-
-		for(var i = 1; i <= 2; i++)
-		{
-			var vPos = (i==1) ? posNoBordes : posExtra;
-			length = vPos.length;
-			for(var j = 0; j < length; j++)
-			{
-				var vItem = vPos[j].split('-');
-				var row = parseInt(vItem[0]);
-				var start = parseInt(vItem[1]);
-				var end = parseInt(vItem[2]);
-				for(var k = start; k <= end;k++)
-				{
-					pos = `${(row+borderRSize)}-${k+borderCSize}`;
-					if(i == 2)
-					{
-						positionsExtra.push(pos);
-					}
-					else
-					{
-						mushroomPos.push(pos);
-					}
-				}
-			}
-		}
-
-		return mushroomPos;
+		var extraPos = ['2-8-9','3-8-9','4-4-4','4-7-10','4-13-13','5-4-13','6-5-6','6-11-12','7-5-5','7-12-12','8-5-5','8-12-12','9-5-5','9-12-12','10-2-6','10-11-15','11-2-3','11-14-15'];
+		return generatePositions(posNoBordes,extraPos);
 	};
 
-	var getAdiposePositions = function(t){
-		var adiposePos = [];
+	var getAdiposePositions = function(){
 		var posNoBordes = ['1-6-12','2-5-13','3-4-14','4-4-14','5-4-6','5-8-10','5-12-14','6-3-15','7-2-16','8-1-6','8-8-10','8-12-17','9-1-2','9-4-7','9-11-14','9-16-17','10-4-14','11-4-14','12-5-13','13-5-13','14-6-8','14-10-12'];
-		var posExtra = ['5-7-7','5-11-11','8-7-7','8-11-11','9-8-10'];
-
-		for(var i = 1; i <= 2; i++)
-		{
-			var vPos = (i==1) ? posNoBordes : posExtra;
-			length = vPos.length;
-			for(var j = 0; j < length; j++)
-			{
-				var vItem = vPos[j].split('-');
-				var row = parseInt(vItem[0]);
-				var start = parseInt(vItem[1]);
-				var end = parseInt(vItem[2]);
-				for(var k = start; k <= end;k++)
-				{
-					pos = `${(row+borderRSize)}-${k+borderCSize}`;
-					if(i == 2)
-					{
-						positionsExtra.push(pos);
-					}
-					else
-					{
-						adiposePos.push(pos);
-					}
-				}
-			}
-		}
-
-		return adiposePos;
+		var extraPos = ['5-7-7','5-11-11','8-7-7','8-11-11','9-8-10'];
+		return generatePositions(posNoBordes,extraPos);
 	};
 
-	var getBatmanPositions = function(t){
-		var batmanPos = [];
+	var getBatmanPositions = function(){
 		var posNoBordes = ['2-2-12','2-24-34','3-4-13','3-23-32','4-5-14','4-22-31','5-6-30','6-6-30','7-6-30','8-5-31','9-4-32','10-10-26','11-14-22','12-16-20','13-17-19'];
-		var posExtra = ['1-1-12','1-24-35','2-17-17','2-19-19','3-3-3','3-17-19','3-33-33','4-15-21','10-5-9','10-27-31','11-11-13','11-23-25','12-15-15','12-21-21','14-18-18'];
-
+		var extraPos = ['1-1-12','1-24-35','2-17-17','2-19-19','3-3-3','3-17-19','3-33-33','4-15-21','10-5-9','10-27-31','11-11-13','11-23-25','12-15-15','12-21-21','14-18-18'];
 		lastRowT = 1;
-
-		for(var i = 1; i <= 2; i++)
-		{
-			var vPos = (i==1) ? posNoBordes : posExtra;
-			length = vPos.length;
-			for(var j = 0; j < length; j++)
-			{
-				var vItem = vPos[j].split('-');
-				var row = parseInt(vItem[0]);
-				var start = parseInt(vItem[1]);
-				var end = parseInt(vItem[2]);
-				for(var k = start; k <= end;k++)
-				{
-					pos = `${(row+borderRSize)}-${k+borderCSize}`;
-					if(i == 2 || k == start || k == end)
-					{
-						positionsExtra.push(pos);
-					}
-					else
-					{
-						batmanPos.push(pos);
-					}
-				}
-			}
-		}
-
-		return batmanPos;
+		return generatePositions(posNoBordes,extraPos,true);
 	};
 
-	var getHeartPositions = function(t){
-		var heartPos = [];
-		var posNoBordes = ['2-3-4','2-6-7','3-2-8','4-2-8','5-3-7','6-4-6','7-5-5'];
-		var posExtra = ['1-3-4','1-6-7','8-5-5'];
-
+	var getHeartPositions = function(){
+		var posNoBordes = ['2-2-5','2-5-8','3-1-9','4-1-9','5-2-8','6-3-7','7-4-6'];
+		var extraPos = ['1-3-4','1-6-7','8-5-5'];
 		lastRowT = 1;
-
-		for(var i = 1; i <= 2; i++)
-		{
-			var vPos = (i==1) ? posNoBordes : posExtra;
-			var sum = (i==1) ? 1 : 0;
-			length = vPos.length;
-			for(var j = 0; j < length;j++)
-			{
-				var vItem = vPos[j].split('-');
-				var row = parseInt(vItem[0]);
-				var start = parseInt(vItem[1]);
-				var end = parseInt(vItem[2]);
-				for(var k = start - sum; k <= end + sum;k++)
-				{
-					pos = `${(row+borderRSize)}-${k+borderCSize}`;
-					if(i == 2 || k == (start - 1) || k == (end + 1))
-					{
-						positionsExtra.push(pos);
-					}
-					else
-					{
-						heartPos.push(pos);
-					}
-				}
-			}
-		}
-
-		return heartPos;
+		return generatePositions(posNoBordes,extraPos,true);
 	};
 
-	var getGhostPositions = function(t){
-		var ghostPos = [];
-
+	var getGhostPositions = function(){
 		var posNoBordes = ['1-6-9','2-4-11','3-3-12','4-2-4','4-7-10','4-13-13','5-2-3','5-8-9','6-2-3','6-8-9','7-1-3','7-8-9','7-14-14','8-1-4','8-7-10','8-13-14','9-1-14','10-1-14','11-1-14','12-1-14','13-1-2','13-4-6','13-9-11','13-13-14','14-1-1','14-5-6','14-9-10','14-14-14'];
-		var posEyes = ['6-6-7','6-12-13','7-6-7','7-12-13'];
-
-		for(var i = 1; i <= 2; i++)
-		{
-			var vPos = (i==1) ? posNoBordes : posEyes;
-			length = vPos.length;
-			for(var j = 0; j < length;j++)
-			{
-				var vItem = vPos[j].split('-');
-				var row = parseInt(vItem[0]);
-				var start = parseInt(vItem[1]);
-				var end = parseInt(vItem[2]);
-				for(var k = start - 1; k < end;k++)
-				{
-					pos = `${(row+borderRSize)}-${k+borderCSize}`;
-					if(i == 1)
-						ghostPos.push(pos);
-					else
-						positionsExtra.push(pos);
-				}
-			}
-		}
-
-		return ghostPos;
+		var extraPos = ['6-6-7','6-12-13','7-6-7','7-12-13'];
+		return generatePositions(posNoBordes,extraPos);
 	};
 
-	var getPacmanPositions = function(t){
-		var pacmanPos = [];
+	var getPacmanPositions = function(){
+		var posNoBordes = ['1-6-11','2-4-13','3-3-14','4-2-15','5-2-15','6-1-13','7-1-10','8-1-7','9-1-10','10-1-13','11-2-15','12-2-15','13-3-14','14-4-13','15-6-11'];
+		return generatePositions(posNoBordes);
+	};
 
-		var posNoBordes = ['6-11','4-13','3-14','2-15','2-15','1-13','1-10','1-7','1-10','1-13','2-15','2-15','3-14','4-13','6-11'];
-		length = posNoBordes.length;
-		for(var i = 0; i < length;i++)
-		{
-			var vItem = posNoBordes[i].split('-');
-			var row = i + 1;
-			var start = parseInt(vItem[0]);
-			var end = parseInt(vItem[1]);
-			for(var j = start; j <= end;j++)
-			{
-				pos = `${(row+borderRSize)}-${j+borderCSize}`;	
-				pacmanPos.push(pos);
-			}
-		}
+	var getSpaceInvadersPositions = function(){
+		var posNoBordes = ['1-3-3','1-9-9','2-4-4','2-8-8','3-3-9','4-2-3','4-5-7','4-9-10','5-1-11','6-1-1','6-3-9','6-11-11','7-1-1','7-3-3','7-9-9','7-11-11','8-4-5','8-7-8'];
+		return generatePositions(posNoBordes);
+	};
 
-		return pacmanPos;
+	var getTardisPositions = function(t){
+
+		var posNoBordes = ['1-6-6','2-6-6','3-3-9','4-2-10','5-2-2','5-6-6','5-10-10','6-2-2','6-6-6','6-10-10','7-2-2','7-6-6','7-10-10','8-2-10','9-2-2','9-6-6','9-10-10','10-2-2','10-6-6','10-10-10','11-2-10','12-2-2','12-6-6','12-10-10','13-2-2','13-6-6','13-10-10','14-2-10','15-2-2','15-6-6','15-10-10','16-2-2','16-6-6','16-10-10','17-2-10'];
+		var extraPos = ['5-3-5','5-7-9','6-3-5','6-7-9','7-3-5','7-7-9','9-3-5','9-7-9','10-3-5','10-7-9','12-3-5','12-7-9','13-3-5','13-7-9','15-3-5','15-7-9','16-3-5','16-7-9'];
+		lastRowT = 0;
+		return generatePositions(posNoBordes,extraPos);
 	};
 
 	var getLifePositions = function(t){
@@ -309,104 +229,6 @@ function GeekLoader(){
 		}while(cantGenerated < limit);
 
 		return lifePositions;
-	};
-
-	var getSpaceInvadersPositions = function(t){
-		var spaceInvadersPos = [];
-		var posNoBordes = ['1-3-3','1-9-9','2-4-4','2-8-8','3-3-9','4-2-3','4-5-7','4-9-10','5-1-11','6-1-1','6-3-9','6-11-11','7-1-1','7-3-3','7-9-9','7-11-11','8-4-5','8-7-8'];
-		length = posNoBordes.length;
-		for(var i = 0; i < length;i++)
-		{
-			var vItem = posNoBordes[i].split('-');
-			var row = parseInt(vItem[0]);
-			var start = parseInt(vItem[1]);
-			var end = parseInt(vItem[2]);
-			for(var j = start; j <= end; j++)
-			{
-				var pos = `${(row+borderRSize)}-${j+borderCSize}`;
-				spaceInvadersPos.push(pos);
-			}
-		}
-
-		return spaceInvadersPos;
-	};
-
-	var getTardisPositions = function(t){
-		var posTardis = [];
-		var data = {
-			start:2,
-			end:t.columns-1,
-			bottom:t.rows-1,
-			top:5
-		};
-
-		lastRowT = t.rows;
-		
-		for(var i = data.start; i <= data.end; i++)
-		{
-			if(i>data.start && i < data.end)
-			{
-				pos = `${(data.top -1)}-${i}`;
-				posTardis.push(pos);
-			}
-
-			pos = `${data.bottom}-${i}`;
-			posTardis.push(pos);
-			pos = `${data.top}-${i}`;
-			posTardis.push(pos);
-		}
-		
-
-		for(var i = data.top; i <= data.bottom; i++)
-		{
-			pos = `${i}-${data.start}`;
-			posTardis.push(pos);
-			pos = `${i}-${data.end}`;
-			posTardis.push(pos);
-		}
-
-		for(var i = (data.top + 3);i < (data.bottom - 1);i=i+3)
-		{
-			for(var j = data.start; j <= data.end; j++)
-			{
-				pos = `${i}-${j}`;
-				posTardis.push(pos);
-			}		
-		}
-
-		getTopTardis(t);
-		
-		for(var i = data.top; i < data.bottom;i++)
-		{
-			for(var j = data.start; j < data.end; j++)
-			{
-				pos = `${i}-${j}`;
-				if(!~posTardis.indexOf(pos))
-				{
-					positionsExtra.push(pos);
-				}
-			}
-		}
-
-		return posTardis.filter(function(elem, index) {
-			return posTardis.indexOf(elem) == index;
-		});
-
-		function getTopTardis(t)
-		{
-			var middle = [];
-			var from = 2;
-			var midP = parseInt((t.columns) / 2);
-			middle = (t.columns % 2 == 0) ? [midP,(midP+1)] : middle = [midP+1];
-			for(var i = from; i < (data.bottom);i++)
-			{
-				for(var j = 0; j < middle.length;j++)
-				{
-					pos = `${i}-${middle[j]}`;
-					posTardis.push(pos);
-				}
-			}
-		}
 	};
 
 	this.loadBrick = function(){
@@ -545,96 +367,85 @@ function GeekLoader(){
 			case 'batman' : moveCellB(t); break;
 			case 'adipose' : moveCellAd(t); break;
 			case 'mushroom' : moveCellM(t); break;
+			case 'andy' : moveCellAn(t); break;
+			case 't-rex' : moveCellTr(t); break;
 		}
+	};
+
+	var checkCells = function(positions,t,control)
+	{
+		control = (control==undefined) ? false : true;
+		sum = (control) ? 0 : 1;
+		var length = positions.length;
+		for(var i = 0; i < length; i++)
+		{
+			var vPos = positions[i].split('-');
+			var row = parseInt(vPos[0]);
+			var col = parseInt(vPos[1]);
+			var brickName = `brick${row+sum}-${col+sum}-${t.contain}`;
+			var bDiv = dL.getElementById(brickName);
+			var condition = (control) ? ((~positionsLife.indexOf((`${row}-${col}`)) == 0) ? false : true) : true;
+			if(bDiv.className == 'brickB')
+			{
+				setStyle(bDiv,'brickW',styleLoaded.brickW,t);
+			}
+			else if(bDiv.className == 'brickW' && condition)
+			{
+				setStyle(bDiv,'brickB',styleLoaded.brickB,t);
+			}
+		}
+	}
+
+	var checkCellsRows = function(t){
+		var posToCheck = [];
+		lastRowT = ((lastRowT + 1) == (t.rows - 1)) ? 2 : lastRowT + 1;
+		
+		for(var i = 1; i <= t.columns; i++)
+		{
+			posName = `${lastRowT}-${i}`;
+			posToCheck.push(posName);
+		}
+		checkCells(posToCheck,t,true);
+	}
+
+	var moveCellTr = function(t){
+		var posToCheck = ['19-12','20-11','21-11','22-11','22-12','20-6','20-8','21-6','22-6','22-7'];
+		checkCells(posToCheck,t);
+	};
+
+	var moveCellAn = function(t){
+		checkCellsRows(t);
 	};
 
 	var moveCellM = function(t){
 		var posToCheck = ['13-7','13-10','14-6','15-7','15-8','15-9','15-10','14-11'];
-		var length = posToCheck.length;
-		for(var i = 0; i < length; i++)
-		{
-			var vPos = posToCheck[i].split('-');
-			var row = parseInt(vPos[0]);
-			var col = parseInt(vPos[1]);
-			var brickName = `brick${row+borderRSize}-${col+borderCSize}-${t.contain}`;
-			var bDiv = dL.getElementById(brickName);
-			if(bDiv.className == 'brickB')
-			{
-				setStyle(bDiv,'brickW',styleLoaded.brickW,t);
-			}
-			else if(bDiv.className == 'brickW')
-			{
-				setStyle(bDiv,'brickB',styleLoaded.brickB,t);
-			}
-		}
+		checkCells(posToCheck,t);
 	};
 
 	var moveCellAd = function(t){
 		var posToCheck = ['5-1','5-2','6-1','6-2','8-1','8-2','9-1','9-2'];
-		var length = posToCheck.length;
-		for(var i = 0; i < length; i++)
-		{
-			var vPos = posToCheck[i].split('-');
-			var row = parseInt(vPos[0]);
-			var col = parseInt(vPos[1]);
-			var brickName = `brick${row+borderRSize}-${col+borderCSize}-${t.contain}`;
-			var bDiv = dL.getElementById(brickName);
-			if(bDiv.className == 'brickB')
-			{
-				setStyle(bDiv,'brickW',styleLoaded.brickW,t);
-			}
-			else if(bDiv.className == 'brickW')
-			{
-				setStyle(bDiv,'brickB',styleLoaded.brickB,t);
-			}
-		}
+		checkCells(posToCheck,t);
 	};
+
+	var moveCellI = function(t)
+	{
+		var posToCheck = ['3-1','3-11','4-1','4-11','6-1','6-2','6-10','6-11','7-1','7-11','8-2','8-4','8-5','8-7','8-8','8-10'];
+		checkCells(posToCheck,t);
+	}
 
 	var moveCellB = function(t)
 	{
-		var brickName,posName;
-		lastRowT = ((lastRowT + 1) == (t.rows - 1)) ? 2 : lastRowT + 1;
-		
-		for(var i = 1; i <= t.columns; i++)
-		{
-			posName = `${lastRowT}-${i}`;
-			brickName = `brick${lastRowT}-${i}-${t.contain}`;
-			var bDiv = dL.getElementById(brickName);
-			if(bDiv.className == 'brickB')
-			{
-				setStyle(bDiv,'brickW',styleLoaded.brickW,t);
-			}
-			else if(bDiv.className == 'brickW' && (~positionsLife.indexOf(posName)))
-			{
-				setStyle(bDiv,'brickB',styleLoaded.brickB,t);
-			}
-		}
+		checkCellsRows(t);
 	};
 
 	var moveCellH = function(t)
 	{
-		var brickName,posName;
-		lastRowT = ((lastRowT + 1) == (t.rows - 1)) ? 2 : lastRowT + 1;
-		
-		for(var i = 1; i <= t.columns; i++)
-		{
-			posName = `${lastRowT}-${i}`;
-			brickName = `brick${lastRowT}-${i}-${t.contain}`;
-			var bDiv = dL.getElementById(brickName);
-			if(bDiv.className == 'brickB')
-			{
-				setStyle(bDiv,'brickW',styleLoaded.brickW,t);
-			}
-			else if(bDiv.className == 'brickW' && (~positionsLife.indexOf(posName)))
-			{
-				setStyle(bDiv,'brickB',styleLoaded.brickB,t);
-			}
-		}
+		checkCellsRows(t);
 	};
 
 	var moveCellG = function(t)
 	{
-		var posToCheck = ['6-5','4-4','6-3','7-4'];
+		var posToCheck = ['6-6','4-5','6-4','7-5'];
 		var brickName,eyesIndex;
 		var nextEyes = 0;
 
@@ -702,59 +513,14 @@ function GeekLoader(){
 
 	var moveCellP = function(t)
 	{
-		var posToCheck = ['6-14-16','7-11-16','8-8-16','9-11-16','10-14-16'];
-		length = posToCheck.length;
-		for(var i = 0; i < length;i++)
-		{
-			var posData = posToCheck[i].split('-');
-			var rowCheck = parseInt(posData[0]);
-			var startCheck = parseInt(posData[1]);
-			var endCheck = parseInt(posData[2]);
-			for(var j = startCheck; j <= endCheck; j++)
-			{
-				var brickName = `brick${rowCheck+borderRSize}-${j+borderCSize}-${t.contain}`;
-				var bDiv = dL.getElementById(brickName);
-				if(bDiv.className == 'brickB')
-				{
-					setStyle(bDiv,'brickW',styleLoaded.brickW,t);
-				}
-				else if(bDiv.className == 'brickW')
-				{
-					setStyle(bDiv,'brickB',styleLoaded.brickB,t);
-				}
-			}
-		}
+		var posToCheck = ['6-14','6-15','6-16','7-11','7-12','7-13','7-14','7-15','7-16','8-8','8-9','8-10','8-11','8-12','8-13','8-14','8-15','8-16','9-11','9-12','9-13','9-14','9-15','9-16','10-14','10-15','10-16'];
+		checkCells(posToCheck,t);
 	};
-
-	var moveCellI = function(t)
-	{
-		var posToCheck = ['3-1','3-11','4-1','4-11','6-1','6-2','6-10','6-11','7-1','7-11','8-2','8-4','8-5','8-7','8-8','8-10'];
-		for(var i = 1; i < t.rows; i++)
-		{
-			for(var j = 1; j < t.columns;j++)
-			{
-				var posCheck = `${i}-${j}`;
-				if(~posToCheck.indexOf(posCheck))
-				{
-					var brickName = `brick${i+borderRSize}-${j+borderCSize}-${t.contain}`;
-					var bDiv = dL.getElementById(brickName);
-					if(bDiv.className == 'brickB')
-					{
-						setStyle(bDiv,'brickW',styleLoaded.brickW,t);
-					}
-					else if(bDiv.className == 'brickW')
-					{
-						setStyle(bDiv,'brickB',styleLoaded.brickB,t);
-					}
-				}
-			}
-		}
-	}
 
 	var moveCellT = function(t)
 	{
 		var brickName,posName;
-		lastRowT = ((lastRowT - 1) == 1) ? t.rows : lastRowT - 1;
+		lastRowT = ((lastRowT + 1) == t.rows) ? 1 : lastRowT + 1;
 		
 		for(var i = 1; i <= t.columns; i++)
 		{
