@@ -41,7 +41,7 @@ You can configure the loader with these options
 ### Available Options
 Options | Values | Default Value
 ------- | ------ | -------------
-type | life,ant,tardis,invaders,pacman,ghost | life
+type | life,ant,tardis,invaders,pacman,ghost,heart,batman,adipose,mushroom,t-rex,andy | life
 rows | > 4 | 12
 columns | > 4 | 12
 size | > 2 | 5
@@ -49,12 +49,12 @@ time | > 200 | 500
 border | true or false | true
 background | true or false | true
 contain | Any div's ID | loader
-style | primary, not-primary, pacman | default
-      | success, not-success, blinky
-      | info, not-info, pinky
+style | primary, not-primary, pacman, batman | default
+      | success, not-success, blinky, player1
+      | info, not-info, pinky, player2
       | warning, not-warning, inky
       | danger, not-danger, clyde
-      | default, tardis
+      | default, tardis, adipose
 
 
 ### How to configure it

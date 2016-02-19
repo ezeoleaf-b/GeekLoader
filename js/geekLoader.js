@@ -8,15 +8,14 @@ function GeekLoader(){
 		borderRSize = 1,
 		borderCSize = 1;
 
-	this.type = 'life';
 	this.contain = 'loader';
 	this.size = 5;
 	this.rows = 12;
 	this.columns = 12;
-	this.border = true;
+	this.border = false;
 	this.style = 'default';
 	this.time = 500;
-	this.background = true;
+	this.background = false;
 	
 	this.randomType = function(){
 		var types = this.getTypesAvailable();
@@ -709,5 +708,5 @@ function GeekLoader(){
 	this.cleanDesk = function(){
 		dL.getElementById(this.contain).innerHTML = '';
 	};
-
+	this.randomType();
 };
