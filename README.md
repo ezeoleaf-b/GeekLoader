@@ -7,6 +7,11 @@ GeekLoader is a loader made with Javascript so you can replace the boring loader
 * Ghost (From Pacman)
 * Tardis
 * Heart (From The legend of Zelda)
+* Batman Logo
+* Adipose (From Doctor Who)
+* Mushroom (From Mario)
+* T-Rex (Chrome)
+* Andy (Android Mascot)
 
 ## Examples
 
@@ -46,8 +51,8 @@ rows | > 4 | 12
 columns | > 4 | 12
 size | > 2 | 5
 time | > 200 | 500
-border | true or false | true
-background | true or false | true
+border | true or false | false
+background | true or false | false
 contain | Any div's ID | loader
 style | primary, not-primary, pacman, batman | default
       | success, not-success, blinky, player1
@@ -60,7 +65,7 @@ style | primary, not-primary, pacman, batman | default
 ### How to configure it
 ```javascript
 loader.type = 'life';
-loader.setSize(rows,columns) or loader.rows=10;loader.columns=10;
+loader.setSize(rows,columns) or loader.rows=10;loader.columns=10; //Only for ant or life
 loader.time = 500;
 loader.contain = 'divLoader';
 loader.border = false;
